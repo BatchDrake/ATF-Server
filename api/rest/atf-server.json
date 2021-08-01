@@ -2,8 +2,17 @@
   "openapi": "3.1.0",
   "info": {
     "title": "atf-server",
-    "version": "1.0",
-    "summary": "Server API for ATF-like contests, managing points, users and parties."
+    "version": "0.1",
+    "summary": "Server API for ATF-like contests, managing points, users and parties.",
+    "license": {
+      "name": "AGPLv3",
+      "url": "https://www.gnu.org/licenses/gpl-3.0.html"
+    },
+    "contact": {
+      "name": "Gonzalo J. Carracedo",
+      "url": "https://actinid.org/"
+    },
+    "description": "This API describes the communication protocol between client and server for a party contest."
   },
   "servers": [
     {
@@ -11,267 +20,458 @@
     }
   ],
   "paths": {
-    "/users/{userId}": {
-      "parameters": [
-        {
-          "schema": {
-            "type": "integer"
-          },
-          "name": "userId",
-          "in": "path",
-          "required": true,
-          "description": "Id of an existing user."
-        }
-      ],
+    "/ranking": {
       "get": {
-        "summary": "Get User Info by User ID",
-        "tags": [],
+        "summary": "Query ranking",
+        "tags": [
+          "ranking"
+        ],
         "responses": {
           "200": {
-            "description": "User Found",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
-                },
-                "examples": {
-                  "Get User Alice Smith": {
-                    "value": {
-                      "id": 142,
-                      "firstName": "Alice",
-                      "lastName": "Smith",
-                      "email": "alice.smith@gmail.com",
-                      "dateOfBirth": "1997-10-31",
-                      "emailVerified": true,
-                      "signUpDate": "2019-08-24"
-                    }
-                  }
+                  "$ref": "#/components/schemas/RankingCollectionResponse"
                 }
               }
-            }
-          },
-          "404": {
-            "description": "User Not Found"
-          }
-        },
-        "operationId": "get-users-userId",
-        "description": "Retrieve the information of the user with the matching user ID."
-      },
-      "patch": {
-        "summary": "Update User Information",
-        "operationId": "patch-users-userId",
-        "responses": {
-          "200": {
-            "description": "User Updated",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                },
-                "examples": {
-                  "Updated User Rebecca Baker": {
-                    "value": {
-                      "id": 13,
-                      "firstName": "Rebecca",
-                      "lastName": "Baker",
-                      "email": "rebecca@gmail.com",
-                      "dateOfBirth": "1985-10-02",
-                      "emailVerified": false,
-                      "createDate": "2019-08-24"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "User Not Found"
-          },
-          "409": {
-            "description": "Email Already Taken"
-          }
-        },
-        "description": "Update the information of an existing user.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "firstName": {
-                    "type": "string"
-                  },
-                  "lastName": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "If a new email is given, the user's email verified property will be set to false."
-                  },
-                  "dateOfBirth": {
-                    "type": "string"
-                  }
-                }
-              },
-              "examples": {
-                "Update First Name": {
-                  "value": {
-                    "firstName": "Rebecca"
-                  }
-                },
-                "Update Email": {
-                  "value": {
-                    "email": "rebecca@gmail.com"
-                  }
-                },
-                "Update Last Name & Date of Birth": {
-                  "value": {
-                    "lastName": "Baker",
-                    "dateOfBirth": "1985-10-02"
-                  }
-                }
-              }
-            }
-          },
-          "description": "Patch user properties to update."
-        }
-      }
-    },
-    "/user": {
-      "post": {
-        "summary": "Create New User",
-        "operationId": "post-user",
-        "responses": {
-          "200": {
-            "description": "User Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                },
-                "examples": {
-                  "New User Bob Fellow": {
-                    "value": {
-                      "id": 12,
-                      "firstName": "Bob",
-                      "lastName": "Fellow",
-                      "email": "bob.fellow@gmail.com",
-                      "dateOfBirth": "1996-08-24",
-                      "emailVerified": false,
-                      "createDate": "2020-11-18"
-                    }
-                  }
-                }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
               }
             }
           },
           "400": {
-            "description": "Missing Required Information"
+            "description": "Bad Request"
           },
-          "409": {
-            "description": "Email Already Taken"
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
+        "operationId": "list-ranking",
+        "description": "Gives access to the current contest ranking.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ]
+      }
+    },
+    "/user": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCollectionResponse"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          }
+        },
+        "operationId": "list-users",
+        "description": "List existing users.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ]
+      },
+      "post": {
+        "summary": "",
+        "operationId": "post-user",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicProfile"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          }
+        },
+        "description": "Create a new user in the system.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "firstName": {
-                    "type": "string"
-                  },
-                  "lastName": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "dateOfBirth": {
-                    "type": "string",
-                    "format": "date"
-                  }
-                },
-                "required": [
-                  "firstName",
-                  "lastName",
-                  "email",
-                  "dateOfBirth"
-                ]
-              },
-              "examples": {
-                "Create User Bob Fellow": {
-                  "value": {
-                    "firstName": "Bob",
-                    "lastName": "Fellow",
-                    "email": "bob.fellow@gmail.com",
-                    "dateOfBirth": "1996-08-24"
-                  }
-                }
+                "$ref": "#/components/schemas/PublicProfile"
               }
             }
-          },
-          "description": "Post the necessary fields for the API to create a new user."
+          }
         },
-        "description": "Create a new user."
+        "tags": [
+          "user"
+        ],
+        "parameters": []
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicProfile"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          }
+        },
+        "operationId": "get-user-id",
+        "description": "Get an user.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/idParameter"
+        }
+      ],
+      "patch": {
+        "summary": "",
+        "operationId": "patch-user-id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicProfile"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          }
+        },
+        "description": "Update an user's score.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScoreUpdate"
+              }
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ]
       }
     }
   },
   "components": {
     "schemas": {
-      "User": {
-        "title": "User",
+      "PageMetadata": {
+        "title": "PageMetadata",
         "type": "object",
-        "description": "",
-        "examples": [
-          {
-            "id": 142,
-            "firstName": "Alice",
-            "lastName": "Smith",
-            "email": "alice.smith@gmail.com",
-            "dateOfBirth": "1997-10-31",
-            "emailVerified": true,
-            "signUpDate": "2019-08-24"
+        "description": "Necessary information for paged collections.",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Number of elements in this page.",
+            "format": "int64"
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of elements in the collection.",
+            "format": "int64"
+          },
+          "first": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to the first page of this collection."
+          },
+          "previous": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to the previous page of this collection. Only present if there is a previous page."
+          },
+          "next": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to the next page of this collection. Only present if there is a next page."
+          },
+          "last": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link to the last page of this collection."
+          },
+          "start": {
+            "type": "integer",
+            "description": "Number of the item at the start of this page. Only present if the page is not empty.",
+            "format": "int64"
+          },
+          "finish": {
+            "type": "integer",
+            "description": "Number of the item at the end of this page. Only present if the page is not empty.",
+            "format": "int64"
           }
-        ],
+        },
+        "required": [
+          "count",
+          "total",
+          "first",
+          "last"
+        ]
+      },
+      "RankingCollectionResponse": {
+        "title": "RankingCollectionResponse",
+        "type": "object",
+        "description": "Paged collection response for raking requests. Includes ranking data and paging metadata.",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "The ranking information sorted by rank.",
+            "items": {
+              "$ref": "#/components/schemas/Ranking"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        },
+        "required": [
+          "data",
+          "metadata"
+        ]
+      },
+      "Ranking": {
+        "title": "Ranking",
+        "type": "object",
+        "description": "Represents a position on the contest's ranking, always held by an user.",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "description": "Number of the position in the ranking.",
+            "format": "int64"
+          },
+          "variation": {
+            "type": "string",
+            "description": "Represents the user's variation in rank after the last update. Possible values are RISES, STAYS and FALLS.",
+            "enum": [
+              "RISES",
+              "STAYS",
+              "FALLS"
+            ]
+          },
+          "holder": {
+            "$ref": "#/components/schemas/PublicProfile"
+          }
+        },
+        "required": [
+          "position",
+          "variation",
+          "holder"
+        ]
+      },
+      "PublicProfile": {
+        "title": "PublicProfile",
+        "type": "object",
+        "description": "Represents publicly available information about an user.",
         "properties": {
           "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "avatar": {
+            "type": "string",
+            "format": "uri"
+          },
+          "score": {
             "type": "integer",
-            "description": "Unique identifier for the given user."
+            "format": "int64"
           },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "dateOfBirth": {
-            "type": "string",
-            "format": "date",
-            "example": "1997-10-31"
-          },
-          "emailVerified": {
-            "type": "boolean",
-            "description": "Set to true if the user's email has been verified."
-          },
-          "createDate": {
-            "type": "string",
-            "format": "date",
-            "description": "The date that the user was created."
+          "victories": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0,
+            "description": "Number of times this participant has won the contest."
           }
         },
         "required": [
           "id",
-          "firstName",
-          "lastName",
-          "email",
-          "emailVerified"
+          "name",
+          "avatar",
+          "score",
+          "victories"
         ]
+      },
+      "EntityId": {
+        "type": "integer",
+        "title": "EntityId",
+        "format": "int64",
+        "description": "Entity identifier.",
+        "minimum": 0
+      },
+      "ScoreUpdate": {
+        "title": "ScoreUpdate",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "description": "Represents a change in the score of a user."
+      },
+      "UserCollectionResponse": {
+        "title": "UserCollectionResponse",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicProfile"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        },
+        "description": "Paged collection response for user list requests. Includes user profile data and paging metadata."
+      }
+    },
+    "parameters": {
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 100,
+          "format": "int64"
+        },
+        "description": "Number of elements to return in a collection request."
+      },
+      "offset": {
+        "name": "offset",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int64",
+          "default": 0,
+          "minimum": 0
+        },
+        "description": "Number of elements to skip in a collection request."
+      },
+      "idParameter": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "minLength": 1,
+          "format": "int64",
+          "minimum": 0,
+          "example": 1752567
+        },
+        "description": "Identifier for an entity in the system, passed as a path parameter."
+      },
+      "ifNoneMatchHeader": {
+        "name": "If-None-Match",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "array"
+        },
+        "description": "The If-None-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource, with a 200 status, only if it doesn't have an ETag matching the given ones. For other methods, the request will be processed only if the eventually existing resource's ETag doesn't match any of the values listed."
+      },
+      "ifMatchHeader": {
+        "name": "If-Match",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "array"
+        },
+        "description": "The If-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource only if it matches one of the listed ETags. For PUT and other non-safe methods, it will only upload the resource in this case."
+      }
+    },
+    "headers": {
+      "eTagHeader": {
+        "schema": {
+          "type": "string"
+        },
+        "description": "The ETag HTTP response header is an identifier for a specific version of a resource. It lets caches be more efficient and save bandwidth, as a web server does not need to resend a full response if the content has not changed. Additionally, etags help prevent simultaneous updates of a resource from overwriting each other mid-air collisions)."
+      }
+    },
+    "securitySchemes": {
+      "personalKey": {
+        "type": "http",
+        "scheme": "basic"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "ranking"
+    },
+    {
+      "name": "user"
+    }
+  ]
 }
