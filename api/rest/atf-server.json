@@ -273,7 +273,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Announcement"
+                "$ref": "#/components/schemas/AnnouncementCreation"
               }
             }
           }
@@ -731,15 +731,18 @@
           },
           "name": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Display name of the user."
           },
           "avatar": {
             "type": "string",
-            "format": "uri"
+            "format": "uri",
+            "description": "URL to the user's avatar.\n"
           },
           "score": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "User's current score."
           },
           "victories": {
             "type": "integer",
@@ -800,6 +803,31 @@
           "date",
           "location",
           "announcer"
+        ]
+      },
+      "AnnouncementCreation": {
+        "title": "AnnouncementCreation",
+        "type": "object",
+        "description": "An announcement is a party proposal that a user can create. This is the model for announcement creation. It's different for the complete announcement data in that it doesn't need to include the user, which will be obtained from the session information.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date (to day precission only) of this announcement."
+          },
+          "location": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Geographical location of this announcement."
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "location"
         ]
       },
       "PartyCollectionResponse": {
