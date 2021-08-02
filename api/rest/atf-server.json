@@ -108,8 +108,8 @@
         "summary": "Create user",
         "operationId": "post-user",
         "responses": {
-          "200": {
-            "description": "OK",
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -122,9 +122,28 @@
                 "$ref": "#/components/headers/eTagHeader"
               }
             }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "description": "Create a new user in the system.",
+        "tags": [
+          "user"
+        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
@@ -133,11 +152,7 @@
               }
             }
           }
-        },
-        "tags": [
-          "user"
-        ],
-        "parameters": []
+        }
       }
     },
     "/user/{id}": {
