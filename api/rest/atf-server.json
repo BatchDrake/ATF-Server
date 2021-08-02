@@ -75,7 +75,7 @@
     },
     "/user": {
       "get": {
-        "summary": "Your GET endpoint",
+        "summary": "Query user list",
         "tags": [
           "user"
         ],
@@ -105,15 +105,15 @@
         ]
       },
       "post": {
-        "summary": "",
+        "summary": "Create user",
         "operationId": "post-user",
         "responses": {
-          "200": {
-            "description": "OK",
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PublicProfile"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             },
@@ -122,27 +122,42 @@
                 "$ref": "#/components/headers/eTagHeader"
               }
             }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "description": "Create a new user in the system.",
+        "tags": [
+          "user"
+        ],
+        "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PublicProfile"
+                "$ref": "#/components/schemas/UserCreation"
               }
             }
           }
-        },
-        "tags": [
-          "user"
-        ],
-        "parameters": []
+        }
       }
     },
     "/user/{id}": {
       "get": {
-        "summary": "Your GET endpoint",
+        "summary": "Fetch user data",
         "tags": [
           "user"
         ],
@@ -152,7 +167,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PublicProfile"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             },
@@ -175,17 +190,185 @@
         {
           "$ref": "#/components/parameters/idParameter"
         }
-      ],
-      "patch": {
-        "summary": "",
-        "operationId": "patch-user-id",
+      ]
+    },
+    "/announcement": {
+      "get": {
+        "summary": "Query announcement list",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PublicProfile"
+                  "$ref": "#/components/schemas/AnnouncementCollectionResponse"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "list-announcement",
+        "description": "Lists all announcements currently visible. That is, announcements active at the present time for anonymous and normal users and all existing announcements for admin users.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ],
+        "tags": [
+          "announcement"
+        ]
+      },
+      "post": {
+        "summary": "Create announcement",
+        "operationId": "post-announcement",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Announcement"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Creates a new announcement. This endpoint is only available to authenticated users.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnnouncementCreation"
+              }
+            }
+          }
+        },
+        "tags": [
+          "announcement"
+        ]
+      }
+    },
+    "/announcement/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Get announcement details",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Announcement"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-announcement-id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ],
+        "tags": [
+          "announcement"
+        ],
+        "description": "Gets data about an announcement given its ID."
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-announcement-id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "tags": [
+          "announcement"
+        ],
+        "description": "Removes an announcement."
+      }
+    },
+    "/party": {
+      "get": {
+        "summary": "List parties",
+        "tags": [
+          "party"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyCollectionResponse"
                 }
               }
             },
@@ -196,29 +379,230 @@
             }
           }
         },
-        "description": "Update an user's score.",
+        "operationId": "list-party",
+        "description": "Lists existing parties.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ]
+      },
+      "post": {
+        "summary": "",
+        "operationId": "post-party",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Party"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ScoreUpdate"
+                "$ref": "#/components/schemas/PartyCreation"
               }
             }
           }
         },
+        "description": "This endpoint is used to create a party resource. Note it is assymetrical, since parties, once created, include much denormalized information, useful on presenting them on screen.\n\nThis endpoint will receive a PartyCreation object and return a full Party object.",
         "tags": [
-          "user"
-        ],
+          "party"
+        ]
+      }
+    },
+    "/party/{party}/confirmation": {
+      "post": {
+        "summary": "Confirm assistance",
+        "operationId": "post-confirmation",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Confirmation"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmationCreation"
+              },
+              "examples": {}
+            }
+          },
+          "description": "The confirmation creation, including an ID and the confirmation image as payload in multipart/form-data."
+        },
+        "description": "Confirms the assistance to a party of one or more participants by creating a confirmation object.",
+        "parameters": [],
+        "tags": [
+          "party"
+        ]
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "name": "party",
+          "in": "path",
+          "required": true,
+          "description": "ID of a party."
+        }
+      ]
+    },
+    "/party/{party}/confirmation/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "name": "party",
+          "in": "path",
+          "required": true,
+          "description": "ID of a party."
+        },
+        {
+          "$ref": "#/components/parameters/idParameter"
+        }
+      ],
+      "get": {
+        "summary": "Get details about a confirmation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Confirmation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "get-confirmation-id",
+        "description": "Gets a confirmation given its ID.",
+        "tags": [
+          "party"
+        ]
+      },
+      "delete": {
+        "summary": "Remove a confirmation",
+        "operationId": "delete-confirmation-id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
         "parameters": [
           {
             "$ref": "#/components/parameters/ifMatchHeader"
           }
+        ],
+        "description": "Removes a confirmation.",
+        "tags": [
+          "party"
         ]
       }
     }
   },
   "components": {
     "schemas": {
+      "EntityId": {
+        "type": "integer",
+        "title": "EntityId",
+        "format": "int64",
+        "description": "Entity identifier.",
+        "minimum": 0
+      },
       "PageMetadata": {
         "title": "PageMetadata",
         "type": "object",
@@ -313,7 +697,7 @@
             ]
           },
           "holder": {
-            "$ref": "#/components/schemas/PublicProfile"
+            "$ref": "#/components/schemas/User"
           }
         },
         "required": [
@@ -322,8 +706,25 @@
           "holder"
         ]
       },
-      "PublicProfile": {
-        "title": "PublicProfile",
+      "UserCollectionResponse": {
+        "title": "UserCollectionResponse",
+        "type": "object",
+        "description": "Paged collection response for user list requests. Includes user profile data and paging metadata.",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "The list of users.",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        }
+      },
+      "User": {
+        "title": "User",
         "type": "object",
         "description": "Represents publicly available information about an user.",
         "properties": {
@@ -332,15 +733,18 @@
           },
           "name": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Display name of the user."
           },
           "avatar": {
             "type": "string",
-            "format": "uri"
+            "format": "uri",
+            "description": "URL to the user's avatar.\n"
           },
           "score": {
             "type": "integer",
-            "format": "int64"
+            "format": "int64",
+            "description": "User's current score."
           },
           "victories": {
             "type": "integer",
@@ -357,41 +761,237 @@
           "victories"
         ]
       },
-      "EntityId": {
-        "type": "integer",
-        "title": "EntityId",
-        "format": "int64",
-        "description": "Entity identifier.",
-        "minimum": 0
-      },
-      "ScoreUpdate": {
-        "title": "ScoreUpdate",
+      "UserCreation": {
+        "title": "UserCreation",
         "type": "object",
+        "description": "Represents information about an user. This model is used for creating a new user in the system.",
         "properties": {
           "id": {
-            "type": "integer"
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Display name of the user."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1,
+            "description": "New user's email."
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "description": "New user's password."
           }
         },
         "required": [
-          "id"
-        ],
-        "description": "Represents a change in the score of a user."
+          "id",
+          "name",
+          "email",
+          "password"
+        ]
       },
-      "UserCollectionResponse": {
-        "title": "UserCollectionResponse",
+      "AnnouncementCollectionResponse": {
+        "title": "AnnouncementCollectionResponse",
         "type": "object",
+        "description": "Paged collection response for announcement list requests. Includes announcement data and paging metadata.",
         "properties": {
           "data": {
             "type": "array",
+            "description": "The list of announcements.",
             "items": {
-              "$ref": "#/components/schemas/PublicProfile"
+              "$ref": "#/components/schemas/Announcement"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        }
+      },
+      "Announcement": {
+        "title": "Announcement",
+        "type": "object",
+        "description": "An announcement is a party proposal that a user can create.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date (to day precission only) of this announcement."
+          },
+          "location": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Geographical location of this announcement."
+          },
+          "announcer": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "location",
+          "announcer"
+        ]
+      },
+      "AnnouncementCreation": {
+        "title": "AnnouncementCreation",
+        "type": "object",
+        "description": "An announcement is a party proposal that a user can create. This is the model for announcement creation. It's different for the complete announcement data in that it doesn't need to include the user, which will be obtained from the session information.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date (to day precission only) of this announcement."
+          },
+          "location": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Geographical location of this announcement."
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "location"
+        ]
+      },
+      "PartyCollectionResponse": {
+        "title": "PartyCollectionResponse",
+        "type": "object",
+        "description": "Paged collection response for party list requests. Includes party data and paging metadata.",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "The list of parties.",
+            "items": {
+              "$ref": "#/components/schemas/Party"
             }
           },
           "metadata": {
             "$ref": "#/components/schemas/PageMetadata"
           }
         },
-        "description": "Paged collection response for user list requests. Includes user profile data and paging metadata."
+        "required": [
+          "data",
+          "metadata"
+        ]
+      },
+      "Party": {
+        "title": "Party",
+        "type": "object",
+        "description": "Represents a party. Includes information of announcement and confirmations.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/PartyType"
+          },
+          "announcement": {
+            "$ref": "#/components/schemas/Announcement"
+          },
+          "confirmations": {
+            "type": "array",
+            "description": "List of confirmations for this party.",
+            "items": {
+              "$ref": "#/components/schemas/Confirmation"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "announcement",
+          "confirmations"
+        ]
+      },
+      "PartyCreation": {
+        "title": "PartyCreation",
+        "type": "object",
+        "description": "Model used to create a party object from an announcement. It only includes necessary data.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "announcement": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "type": {
+            "$ref": "#/components/schemas/PartyType"
+          }
+        },
+        "required": [
+          "id",
+          "announcement",
+          "type"
+        ]
+      },
+      "PartyType": {
+        "type": "string",
+        "title": "PartyType",
+        "enum": [
+          "STANDARD",
+          "OFFICIAL",
+          "INTERNATIONAL"
+        ],
+        "description": "Describes the possible types of parties."
+      },
+      "Confirmation": {
+        "title": "Confirmation",
+        "type": "object",
+        "description": "Confirm the attendance of a certain amount of users to a party.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "photo": {
+            "type": "string",
+            "format": "uri",
+            "description": "Pictorial evidence of the assistance of a group of people to a convened party."
+          },
+          "attenders": {
+            "type": "array",
+            "description": "List of user IDs of those present in the picture.",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/EntityId"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "photo",
+          "attenders"
+        ]
+      },
+      "ConfirmationCreation": {
+        "title": "ConfirmationCreation",
+        "type": "object",
+        "description": "Confirm the attendance of a certain amount of users to a party. This is the model for the creation of a confirmation resource.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "photo": {
+            "type": "string",
+            "format": "binary",
+            "description": "The attendance confirmation photo."
+          }
+        },
+        "required": [
+          "id",
+          "photo"
+        ]
       }
     },
     "parameters": {
@@ -454,7 +1054,7 @@
     "headers": {
       "eTagHeader": {
         "schema": {
-          "type": "string"
+          "type": "array"
         },
         "description": "The ETag HTTP response header is an identifier for a specific version of a resource. It lets caches be more efficient and save bandwidth, as a web server does not need to resend a full response if the content has not changed. Additionally, etags help prevent simultaneous updates of a resource from overwriting each other mid-air collisions)."
       }
@@ -467,6 +1067,12 @@
     }
   },
   "tags": [
+    {
+      "name": "announcement"
+    },
+    {
+      "name": "party"
+    },
     {
       "name": "ranking"
     },
