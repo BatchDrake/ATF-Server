@@ -113,7 +113,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PublicProfile"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             },
@@ -148,7 +148,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PublicProfile"
+                "$ref": "#/components/schemas/UserCreation"
               }
             }
           }
@@ -167,7 +167,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PublicProfile"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             },
@@ -475,12 +475,14 @@
         },
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Confirmation"
-              }
+                "$ref": "#/components/schemas/ConfirmationCreation"
+              },
+              "examples": {}
             }
-          }
+          },
+          "description": "The confirmation creation, including an ID and the confirmation image as payload in multipart/form-data."
         },
         "description": "Confirms the assistance to a party of one or more participants by creating a confirmation object.",
         "parameters": [],
@@ -695,7 +697,7 @@
             ]
           },
           "holder": {
-            "$ref": "#/components/schemas/PublicProfile"
+            "$ref": "#/components/schemas/User"
           }
         },
         "required": [
@@ -713,7 +715,7 @@
             "type": "array",
             "description": "The list of users.",
             "items": {
-              "$ref": "#/components/schemas/PublicProfile"
+              "$ref": "#/components/schemas/User"
             }
           },
           "metadata": {
@@ -721,8 +723,8 @@
           }
         }
       },
-      "PublicProfile": {
-        "title": "PublicProfile",
+      "User": {
+        "title": "User",
         "type": "object",
         "description": "Represents publicly available information about an user.",
         "properties": {
@@ -757,6 +759,39 @@
           "avatar",
           "score",
           "victories"
+        ]
+      },
+      "UserCreation": {
+        "title": "UserCreation",
+        "type": "object",
+        "description": "Represents information about an user. This model is used for creating a new user in the system.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Display name of the user."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1,
+            "description": "New user's email."
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "description": "New user's password."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "password"
         ]
       },
       "AnnouncementCollectionResponse": {
@@ -795,7 +830,7 @@
             "description": "Geographical location of this announcement."
           },
           "announcer": {
-            "$ref": "#/components/schemas/PublicProfile"
+            "$ref": "#/components/schemas/User"
           }
         },
         "required": [
@@ -914,7 +949,7 @@
       "Confirmation": {
         "title": "Confirmation",
         "type": "object",
-        "description": "Confirm the assistance of a certain amount of users to a party",
+        "description": "Confirm the attendance of a certain amount of users to a party.",
         "properties": {
           "id": {
             "$ref": "#/components/schemas/EntityId"
@@ -937,6 +972,25 @@
           "id",
           "photo",
           "attenders"
+        ]
+      },
+      "ConfirmationCreation": {
+        "title": "ConfirmationCreation",
+        "type": "object",
+        "description": "Confirm the attendance of a certain amount of users to a party. This is the model for the creation of a confirmation resource.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "photo": {
+            "type": "string",
+            "format": "binary",
+            "description": "The attendance confirmation photo."
+          }
+        },
+        "required": [
+          "id",
+          "photo"
         ]
       }
     },
