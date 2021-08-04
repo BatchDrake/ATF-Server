@@ -1,0 +1,1214 @@
+openapi: 3.0.3
+info:
+  contact:
+    name: Gonzalo J. Carracedo
+    url: https://actinid.org/
+  description: This API describes the communication protocol between client and server
+    for a party contest.
+  license:
+    name: AGPLv3
+    url: https://www.gnu.org/licenses/gpl-3.0.html
+  title: atf-server
+  version: "0.1"
+servers:
+- url: http://localhost:3000
+tags:
+- name: announcement
+- name: party
+- name: ranking
+- name: user
+paths:
+  /ranking:
+    get:
+      description: Gives access to the current contest ranking.
+      operationId: list-ranking
+      parameters:
+      - description: Number of elements to return in a collection request.
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 100
+          format: int64
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of elements to skip in a collection request.
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          format: int64
+          minimum: 0
+          type: integer
+        style: form
+      - description: The If-None-Match HTTP request header makes the request conditional.
+          For GET and HEAD methods, the server will send back the requested resource,
+          with a 200 status, only if it doesn't have an ETag matching the given ones.
+          For other methods, the request will be processed only if the eventually
+          existing resource's ETag doesn't match any of the values listed.
+        explode: false
+        in: header
+        name: If-None-Match
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RankingCollectionResponse'
+          description: OK
+          headers:
+            ETag:
+              $ref: '#/components/headers/eTagHeader'
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Query ranking
+      tags:
+      - ranking
+      x-eov-operation-handler: controllers/RankingController
+  /user:
+    get:
+      description: List existing users.
+      operationId: list-users
+      parameters:
+      - description: The If-None-Match HTTP request header makes the request conditional.
+          For GET and HEAD methods, the server will send back the requested resource,
+          with a 200 status, only if it doesn't have an ETag matching the given ones.
+          For other methods, the request will be processed only if the eventually
+          existing resource's ETag doesn't match any of the values listed.
+        explode: false
+        in: header
+        name: If-None-Match
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCollectionResponse'
+          description: OK
+          headers:
+            ETag:
+              $ref: '#/components/headers/eTagHeader'
+      summary: Query user list
+      tags:
+      - user
+      x-eov-operation-handler: controllers/UserController
+    post:
+      description: Create a new user in the system.
+      operationId: post-user
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreation'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Created
+          headers:
+            ETag:
+              $ref: '#/components/headers/eTagHeader'
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "409":
+          description: Conflict
+        "500":
+          description: Internal Server Error
+      summary: Create user
+      tags:
+      - user
+      x-eov-operation-handler: controllers/UserController
+  /user/{id}:
+    get:
+      description: Get an user.
+      operationId: get-user-id
+      parameters:
+      - description: Identifier for an entity in the system, passed as a path parameter.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          example: 1752567
+          format: int64
+          minLength: 1
+          minimum: 0
+          type: integer
+        style: simple
+      - description: The If-None-Match HTTP request header makes the request conditional.
+          For GET and HEAD methods, the server will send back the requested resource,
+          with a 200 status, only if it doesn't have an ETag matching the given ones.
+          For other methods, the request will be processed only if the eventually
+          existing resource's ETag doesn't match any of the values listed.
+        explode: false
+        in: header
+        name: If-None-Match
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: OK
+          headers:
+            ETag:
+              $ref: '#/components/headers/eTagHeader'
+      summary: Fetch user data
+      tags:
+      - user
+      x-eov-operation-handler: controllers/UserController
+  /announcement:
+    get:
+      description: Lists all announcements currently visible. That is, announcements
+        active at the present time for anonymous and normal users and all existing
+        announcements for admin users.
+      operationId: list-announcement
+      parameters:
+      - description: The If-None-Match HTTP request header makes the request conditional.
+          For GET and HEAD methods, the server will send back the requested resource,
+          with a 200 status, only if it doesn't have an ETag matching the given ones.
+          For other methods, the request will be processed only if the eventually
+          existing resource's ETag doesn't match any of the values listed.
+        explode: false
+        in: header
+        name: If-None-Match
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnnouncementCollectionResponse'
+          description: OK
+          headers:
+            ETag:
+              $ref: '#/components/headers/eTagHeader'
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Query announcement list
+      tags:
+      - announcement
+      x-eov-operation-handler: controllers/AnnouncementController
+    post:
+      description: Creates a new announcement. This endpoint is only available to
+        authenticated users.
+      operationId: post-announcement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnouncementCreation'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+          description: Created
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Create announcement
+      tags:
+      - announcement
+      x-eov-operation-handler: controllers/AnnouncementController
+  /announcement/{id}:
+    delete:
+      description: Removes an announcement.
+      operationId: delete-announcement-id
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The If-Match HTTP request header makes the request conditional.
+          For GET and HEAD methods, the server will send back the requested resource
+          only if it matches one of the listed ETags. For PUT and other non-safe methods,
+          it will only upload the resource in this case.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "409":
+          description: Conflict
+        "500":
+          description: Internal Server Error
+      tags:
+      - announcement
+      x-eov-operation-handler: controllers/AnnouncementController
+    get:
+      description: Gets data about an announcement given its ID.
+      operationId: get-announcement-id
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The If-None-Match HTTP request header makes the request conditional.
+          For GET and HEAD methods, the server will send back the requested resource,
+          with a 200 status, only if it doesn't have an ETag matching the given ones.
+          For other methods, the request will be processed only if the eventually
+          existing resource's ETag doesn't match any of the values listed.
+        explode: false
+        in: header
+        name: If-None-Match
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+          description: OK
+      summary: Get announcement details
+      tags:
+      - announcement
+      x-eov-operation-handler: controllers/AnnouncementController
+  /party:
+    get:
+      description: Lists existing parties.
+      operationId: list-party
+      parameters:
+      - description: The If-None-Match HTTP request header makes the request conditional.
+          For GET and HEAD methods, the server will send back the requested resource,
+          with a 200 status, only if it doesn't have an ETag matching the given ones.
+          For other methods, the request will be processed only if the eventually
+          existing resource's ETag doesn't match any of the values listed.
+        explode: false
+        in: header
+        name: If-None-Match
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyCollectionResponse'
+          description: OK
+          headers:
+            ETag:
+              $ref: '#/components/headers/eTagHeader'
+      summary: List parties
+      tags:
+      - party
+      x-eov-operation-handler: controllers/PartyController
+    post:
+      description: |-
+        This endpoint is used to create a party resource. Note it is assymetrical, since parties, once created, include much denormalized information, useful on presenting them on screen.
+
+        This endpoint will receive a PartyCreation object and return a full Party object.
+      operationId: post-party
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyCreation'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+          description: Created
+          headers:
+            ETag:
+              $ref: '#/components/headers/eTagHeader'
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      tags:
+      - party
+      x-eov-operation-handler: controllers/PartyController
+  /party/{party}/confirmation:
+    post:
+      description: Confirms the assistance to a party of one or more participants
+        by creating a confirmation object.
+      operationId: post-confirmation
+      parameters:
+      - description: ID of a party.
+        explode: false
+        in: path
+        name: party
+        required: true
+        schema:
+          format: int64
+          minimum: 0
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          multipart/form-data:
+            examples: {}
+            schema:
+              $ref: '#/components/schemas/ConfirmationCreation'
+        description: The confirmation creation, including an ID and the confirmation
+          image as payload in multipart/form-data.
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Confirmation'
+          description: Created
+          headers:
+            ETag:
+              $ref: '#/components/headers/eTagHeader'
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Confirm assistance
+      tags:
+      - party
+      x-eov-operation-handler: controllers/PartyController
+  /party/{party}/confirmation/{id}:
+    delete:
+      description: Removes a confirmation.
+      operationId: delete-confirmation-id
+      parameters:
+      - description: ID of a party.
+        explode: false
+        in: path
+        name: party
+        required: true
+        schema:
+          format: int64
+          minimum: 0
+          type: integer
+        style: simple
+      - description: Identifier for an entity in the system, passed as a path parameter.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          example: 1752567
+          format: int64
+          minLength: 1
+          minimum: 0
+          type: integer
+        style: simple
+      - description: The If-Match HTTP request header makes the request conditional.
+          For GET and HEAD methods, the server will send back the requested resource
+          only if it matches one of the listed ETags. For PUT and other non-safe methods,
+          it will only upload the resource in this case.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: simple
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "409":
+          description: Conflict
+        "500":
+          description: Internal Server Error
+      summary: Remove a confirmation
+      tags:
+      - party
+      x-eov-operation-handler: controllers/PartyController
+    get:
+      description: Gets a confirmation given its ID.
+      operationId: get-confirmation-id
+      parameters:
+      - description: ID of a party.
+        explode: false
+        in: path
+        name: party
+        required: true
+        schema:
+          format: int64
+          minimum: 0
+          type: integer
+        style: simple
+      - description: Identifier for an entity in the system, passed as a path parameter.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          example: 1752567
+          format: int64
+          minLength: 1
+          minimum: 0
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Confirmation'
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get details about a confirmation
+      tags:
+      - party
+      x-eov-operation-handler: controllers/PartyController
+components:
+  headers:
+    eTagHeader:
+      description: The ETag HTTP response header is an identifier for a specific version
+        of a resource. It lets caches be more efficient and save bandwidth, as a web
+        server does not need to resend a full response if the content has not changed.
+        Additionally, etags help prevent simultaneous updates of a resource from overwriting
+        each other mid-air collisions).
+      explode: false
+      schema:
+        items:
+          type: string
+        type: array
+      style: simple
+  parameters:
+    limit:
+      description: Number of elements to return in a collection request.
+      explode: true
+      in: query
+      name: limit
+      required: false
+      schema:
+        default: 100
+        format: int64
+        minimum: 1
+        type: integer
+      style: form
+    offset:
+      description: Number of elements to skip in a collection request.
+      explode: true
+      in: query
+      name: offset
+      required: false
+      schema:
+        default: 0
+        format: int64
+        minimum: 0
+        type: integer
+      style: form
+    idParameter:
+      description: Identifier for an entity in the system, passed as a path parameter.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        example: 1752567
+        format: int64
+        minLength: 1
+        minimum: 0
+        type: integer
+      style: simple
+    ifNoneMatchHeader:
+      description: The If-None-Match HTTP request header makes the request conditional.
+        For GET and HEAD methods, the server will send back the requested resource,
+        with a 200 status, only if it doesn't have an ETag matching the given ones.
+        For other methods, the request will be processed only if the eventually existing
+        resource's ETag doesn't match any of the values listed.
+      explode: false
+      in: header
+      name: If-None-Match
+      required: false
+      schema:
+        items:
+          type: string
+        type: array
+      style: simple
+    ifMatchHeader:
+      description: The If-Match HTTP request header makes the request conditional.
+        For GET and HEAD methods, the server will send back the requested resource
+        only if it matches one of the listed ETags. For PUT and other non-safe methods,
+        it will only upload the resource in this case.
+      explode: false
+      in: header
+      name: If-Match
+      required: false
+      schema:
+        items:
+          type: string
+        type: array
+      style: simple
+  schemas:
+    EntityId:
+      description: Entity identifier.
+      format: int64
+      minimum: 0
+      title: EntityId
+      type: integer
+    PageMetadata:
+      description: Necessary information for paged collections.
+      example:
+        next: https://openapi-generator.tech
+        total: 2
+        previous: https://openapi-generator.tech
+        last: https://openapi-generator.tech
+        count: 5
+        start: 7
+        finish: 9
+        first: https://openapi-generator.tech
+      properties:
+        count:
+          description: Number of elements in this page.
+          format: int64
+          type: integer
+        total:
+          description: Total number of elements in the collection.
+          format: int64
+          type: integer
+        first:
+          description: Link to the first page of this collection.
+          format: uri
+          type: string
+        previous:
+          description: Link to the previous page of this collection. Only present
+            if there is a previous page.
+          format: uri
+          type: string
+        next:
+          description: Link to the next page of this collection. Only present if there
+            is a next page.
+          format: uri
+          type: string
+        last:
+          description: Link to the last page of this collection.
+          format: uri
+          type: string
+        start:
+          description: Number of the item at the start of this page. Only present
+            if the page is not empty.
+          format: int64
+          type: integer
+        finish:
+          description: Number of the item at the end of this page. Only present if
+            the page is not empty.
+          format: int64
+          type: integer
+      required:
+      - count
+      - first
+      - last
+      - total
+      title: PageMetadata
+      type: object
+    RankingCollectionResponse:
+      description: Paged collection response for raking requests. Includes ranking
+        data and paging metadata.
+      example:
+        metadata:
+          next: https://openapi-generator.tech
+          total: 2
+          previous: https://openapi-generator.tech
+          last: https://openapi-generator.tech
+          count: 5
+          start: 7
+          finish: 9
+          first: https://openapi-generator.tech
+        data:
+        - holder:
+            score: 1
+            victories: 0
+            name: name
+            id: 0
+            avatar: https://openapi-generator.tech
+          position: 0
+          variation: RISES
+        - holder:
+            score: 1
+            victories: 0
+            name: name
+            id: 0
+            avatar: https://openapi-generator.tech
+          position: 0
+          variation: RISES
+      properties:
+        data:
+          description: The ranking information sorted by rank.
+          items:
+            $ref: '#/components/schemas/Ranking'
+          type: array
+        metadata:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+      - data
+      - metadata
+      title: RankingCollectionResponse
+      type: object
+    Ranking:
+      description: Represents a position on the contest's ranking, always held by
+        an user.
+      example:
+        holder:
+          score: 1
+          victories: 0
+          name: name
+          id: 0
+          avatar: https://openapi-generator.tech
+        position: 0
+        variation: RISES
+      properties:
+        position:
+          description: Number of the position in the ranking.
+          format: int64
+          type: integer
+        variation:
+          description: Represents the user's variation in rank after the last update.
+            Possible values are RISES, STAYS and FALLS.
+          enum:
+          - RISES
+          - STAYS
+          - FALLS
+          type: string
+        holder:
+          $ref: '#/components/schemas/User'
+      required:
+      - holder
+      - position
+      - variation
+      title: Ranking
+      type: object
+    UserCollectionResponse:
+      description: Paged collection response for user list requests. Includes user
+        profile data and paging metadata.
+      example:
+        metadata:
+          next: https://openapi-generator.tech
+          total: 2
+          previous: https://openapi-generator.tech
+          last: https://openapi-generator.tech
+          count: 5
+          start: 7
+          finish: 9
+          first: https://openapi-generator.tech
+        data:
+        - score: 1
+          victories: 0
+          name: name
+          id: 0
+          avatar: https://openapi-generator.tech
+        - score: 1
+          victories: 0
+          name: name
+          id: 0
+          avatar: https://openapi-generator.tech
+      properties:
+        data:
+          description: The list of users.
+          items:
+            $ref: '#/components/schemas/User'
+          type: array
+        metadata:
+          $ref: '#/components/schemas/PageMetadata'
+      title: UserCollectionResponse
+      type: object
+    User:
+      description: Represents publicly available information about an user.
+      example:
+        score: 1
+        victories: 0
+        name: name
+        id: 0
+        avatar: https://openapi-generator.tech
+      properties:
+        id:
+          description: Entity identifier.
+          format: int64
+          minimum: 0
+          title: EntityId
+          type: integer
+        name:
+          description: Display name of the user.
+          minLength: 1
+          type: string
+        avatar:
+          description: |
+            URL to the user's avatar.
+          format: uri
+          type: string
+        score:
+          description: User's current score.
+          format: int64
+          type: integer
+        victories:
+          description: Number of times this participant has won the contest.
+          format: int64
+          minimum: 0
+          type: integer
+      required:
+      - avatar
+      - id
+      - name
+      - score
+      - victories
+      title: User
+      type: object
+    UserCreation:
+      description: Represents information about an user. This model is used for creating
+        a new user in the system.
+      example:
+        password: password
+        name: name
+        id: 0
+        email: email
+      properties:
+        id:
+          description: Entity identifier.
+          format: int64
+          minimum: 0
+          title: EntityId
+          type: integer
+        name:
+          description: Display name of the user.
+          minLength: 1
+          type: string
+        email:
+          description: New user's email.
+          format: email
+          minLength: 1
+          type: string
+        password:
+          description: New user's password.
+          format: password
+          minLength: 8
+          type: string
+      required:
+      - email
+      - id
+      - name
+      - password
+      title: UserCreation
+      type: object
+    AnnouncementCollectionResponse:
+      description: Paged collection response for announcement list requests. Includes
+        announcement data and paging metadata.
+      example:
+        metadata:
+          next: https://openapi-generator.tech
+          total: 2
+          previous: https://openapi-generator.tech
+          last: https://openapi-generator.tech
+          count: 5
+          start: 7
+          finish: 9
+          first: https://openapi-generator.tech
+        data:
+        - date: 2000-01-23
+          announcer:
+            score: 1
+            victories: 0
+            name: name
+            id: 0
+            avatar: https://openapi-generator.tech
+          location: location
+          id: 0
+        - date: 2000-01-23
+          announcer:
+            score: 1
+            victories: 0
+            name: name
+            id: 0
+            avatar: https://openapi-generator.tech
+          location: location
+          id: 0
+      properties:
+        data:
+          description: The list of announcements.
+          items:
+            $ref: '#/components/schemas/Announcement'
+          type: array
+        metadata:
+          $ref: '#/components/schemas/PageMetadata'
+      title: AnnouncementCollectionResponse
+      type: object
+    Announcement:
+      description: An announcement is a party proposal that a user can create.
+      example:
+        date: 2000-01-23
+        announcer:
+          score: 1
+          victories: 0
+          name: name
+          id: 0
+          avatar: https://openapi-generator.tech
+        location: location
+        id: 0
+      properties:
+        id:
+          description: Entity identifier.
+          format: int64
+          minimum: 0
+          title: EntityId
+          type: integer
+        date:
+          description: Date (to day precission only) of this announcement.
+          format: date
+          type: string
+        location:
+          description: Geographical location of this announcement.
+          minLength: 1
+          type: string
+        announcer:
+          $ref: '#/components/schemas/User'
+      required:
+      - announcer
+      - date
+      - id
+      - location
+      title: Announcement
+      type: object
+    AnnouncementCreation:
+      description: An announcement is a party proposal that a user can create. This
+        is the model for announcement creation. It's different for the complete announcement
+        data in that it doesn't need to include the user, which will be obtained from
+        the session information.
+      example:
+        date: 2000-01-23
+        location: location
+        id: 0
+      properties:
+        id:
+          description: Entity identifier.
+          format: int64
+          minimum: 0
+          title: EntityId
+          type: integer
+        date:
+          description: Date (to day precission only) of this announcement.
+          format: date
+          type: string
+        location:
+          description: Geographical location of this announcement.
+          minLength: 1
+          type: string
+      required:
+      - date
+      - id
+      - location
+      title: AnnouncementCreation
+      type: object
+    PartyCollectionResponse:
+      description: Paged collection response for party list requests. Includes party
+        data and paging metadata.
+      example:
+        metadata:
+          next: https://openapi-generator.tech
+          total: 2
+          previous: https://openapi-generator.tech
+          last: https://openapi-generator.tech
+          count: 5
+          start: 7
+          finish: 9
+          first: https://openapi-generator.tech
+        data:
+        - id: 0
+          confirmations:
+          - attenders:
+            - null
+            - null
+            photo: https://openapi-generator.tech
+            id: 0
+          - attenders:
+            - null
+            - null
+            photo: https://openapi-generator.tech
+            id: 0
+          announcement:
+            date: 2000-01-23
+            announcer:
+              score: 1
+              victories: 0
+              name: name
+              id: 0
+              avatar: https://openapi-generator.tech
+            location: location
+            id: 0
+        - id: 0
+          confirmations:
+          - attenders:
+            - null
+            - null
+            photo: https://openapi-generator.tech
+            id: 0
+          - attenders:
+            - null
+            - null
+            photo: https://openapi-generator.tech
+            id: 0
+          announcement:
+            date: 2000-01-23
+            announcer:
+              score: 1
+              victories: 0
+              name: name
+              id: 0
+              avatar: https://openapi-generator.tech
+            location: location
+            id: 0
+      properties:
+        data:
+          description: The list of parties.
+          items:
+            $ref: '#/components/schemas/Party'
+          type: array
+        metadata:
+          $ref: '#/components/schemas/PageMetadata'
+      required:
+      - data
+      - metadata
+      title: PartyCollectionResponse
+      type: object
+    Party:
+      description: Represents a party. Includes information of announcement and confirmations.
+      example:
+        id: 0
+        confirmations:
+        - attenders:
+          - null
+          - null
+          photo: https://openapi-generator.tech
+          id: 0
+        - attenders:
+          - null
+          - null
+          photo: https://openapi-generator.tech
+          id: 0
+        announcement:
+          date: 2000-01-23
+          announcer:
+            score: 1
+            victories: 0
+            name: name
+            id: 0
+            avatar: https://openapi-generator.tech
+          location: location
+          id: 0
+      properties:
+        id:
+          description: Entity identifier.
+          format: int64
+          minimum: 0
+          title: EntityId
+          type: integer
+        type:
+          $ref: '#/components/schemas/PartyType'
+        announcement:
+          $ref: '#/components/schemas/Announcement'
+        confirmations:
+          description: List of confirmations for this party.
+          items:
+            $ref: '#/components/schemas/Confirmation'
+          type: array
+      required:
+      - announcement
+      - confirmations
+      - id
+      - type
+      title: Party
+      type: object
+    PartyCreation:
+      description: Model used to create a party object from an announcement. It only
+        includes necessary data.
+      example:
+        id: 0
+        announcement: 0
+      properties:
+        id:
+          description: Entity identifier.
+          format: int64
+          minimum: 0
+          title: EntityId
+          type: integer
+        announcement:
+          description: Entity identifier.
+          format: int64
+          minimum: 0
+          title: EntityId
+          type: integer
+        type:
+          $ref: '#/components/schemas/PartyType'
+      required:
+      - announcement
+      - id
+      - type
+      title: PartyCreation
+      type: object
+    PartyType:
+      description: Describes the possible types of parties.
+      enum:
+      - STANDARD
+      - OFFICIAL
+      - INTERNATIONAL
+      title: PartyType
+      type: string
+    Confirmation:
+      description: Confirm the attendance of a certain amount of users to a party.
+      example:
+        attenders:
+        - null
+        - null
+        photo: https://openapi-generator.tech
+        id: 0
+      properties:
+        id:
+          description: Entity identifier.
+          format: int64
+          minimum: 0
+          title: EntityId
+          type: integer
+        photo:
+          description: Pictorial evidence of the assistance of a group of people to
+            a convened party.
+          format: uri
+          type: string
+        attenders:
+          description: List of user IDs of those present in the picture.
+          items:
+            $ref: '#/components/schemas/EntityId'
+          minItems: 1
+          type: array
+      required:
+      - attenders
+      - id
+      - photo
+      title: Confirmation
+      type: object
+    ConfirmationCreation:
+      description: Confirm the attendance of a certain amount of users to a party.
+        This is the model for the creation of a confirmation resource.
+      properties:
+        id:
+          $ref: '#/components/schemas/EntityId'
+        photo:
+          description: The attendance confirmation photo.
+          format: binary
+          type: string
+      required:
+      - id
+      - photo
+      title: ConfirmationCreation
+      type: object
+  securitySchemes:
+    personalKey:
+      scheme: basic
+      type: http
