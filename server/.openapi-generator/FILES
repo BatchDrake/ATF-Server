@@ -1,5 +1,4 @@
 .eslintrc.json
-README.md
 api/openapi.yaml
 config.js
 controllers/AnnouncementController.js
@@ -11,7 +10,6 @@ controllers/index.js
 expressServer.js
 index.js
 logger.js
-package.json
 services/AnnouncementService.js
 services/PartyService.js
 services/RankingService.js
