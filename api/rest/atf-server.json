@@ -1,9 +1,8 @@
 {
-  "openapi": "3.1.0",
+  "openapi": "3.0.3",
   "info": {
     "title": "atf-server",
     "version": "0.1",
-    "summary": "Server API for ATF-like contests, managing points, users and parties.",
     "license": {
       "name": "AGPLv3",
       "url": "https://www.gnu.org/licenses/gpl-3.0.html"
@@ -1037,7 +1036,10 @@
         "in": "header",
         "required": false,
         "schema": {
-          "type": "array"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "description": "The If-None-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource, with a 200 status, only if it doesn't have an ETag matching the given ones. For other methods, the request will be processed only if the eventually existing resource's ETag doesn't match any of the values listed."
       },
@@ -1046,7 +1048,10 @@
         "in": "header",
         "required": false,
         "schema": {
-          "type": "array"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "description": "The If-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource only if it matches one of the listed ETags. For PUT and other non-safe methods, it will only upload the resource in this case."
       }
@@ -1054,7 +1059,10 @@
     "headers": {
       "eTagHeader": {
         "schema": {
-          "type": "array"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "description": "The ETag HTTP response header is an identifier for a specific version of a resource. It lets caches be more efficient and save bandwidth, as a web server does not need to resend a full response if the content has not changed. Additionally, etags help prevent simultaneous updates of a resource from overwriting each other mid-air collisions)."
       }

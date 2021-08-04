@@ -12,6 +12,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
+    "generate": "npx @openapitools/openapi-generator-cli generate -i ../api/rest/atf-server.json -g typescript-fetch -o src",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
