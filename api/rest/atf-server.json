@@ -118,11 +118,6 @@
         "description": "This endpoint allows requesting the resetting of an account's password given the user has access to the email account used to register this account.\n\nThe process involves sending an email address to this endpoint, which, if existing, will trigger the system sending an email with a one time token to reset the account to that address.\n\nFor security reasons this endpoint will answer 202 Accepted in any case, whether the email is in the system or not, to prevent enumeration attacks. If the object receive does not contain a valid email address or does not contain one at all, the answer will be 400 Bad Request.",
         "tags": [
           "account"
-        ],
-        "security": [
-          {
-            "personalKey": []
-          }
         ]
       }
     },
@@ -156,12 +151,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "personalKey": []
-          }
-        ]
+        }
       },
       "parameters": [
         {
