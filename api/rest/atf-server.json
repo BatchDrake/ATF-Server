@@ -2,10 +2,10 @@
   "openapi": "3.0.3",
   "info": {
     "title": "atf-server",
-    "version": "0.1",
+    "version": "0.2",
     "license": {
       "name": "AGPLv3",
-      "url": "https://www.gnu.org/licenses/gpl-3.0.html"
+      "url": "https://www.gnu.org/licenses/agpl-3.0.html"
     },
     "contact": {
       "name": "Gonzalo J. Carracedo",
@@ -40,6 +40,9 @@
                 "$ref": "#/components/headers/eTagHeader"
               }
             }
+          },
+          "304": {
+            "description": "Not Modified"
           },
           "400": {
             "description": "Bad Request"
@@ -93,6 +96,24 @@
                 "$ref": "#/components/headers/eTagHeader"
               }
             }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "operationId": "list-users",
@@ -175,6 +196,24 @@
                 "$ref": "#/components/headers/eTagHeader"
               }
             }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "operationId": "get-user-id",
@@ -190,6 +229,77 @@
           "$ref": "#/components/parameters/idParameter"
         }
       ]
+    },
+    "/user/{id}/confirmation": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minLength": 1,
+            "format": "int64",
+            "minimum": 0,
+            "example": 1752567
+          },
+          "description": "Identifier for an entity in the system, passed as a path parameter."
+        }
+      ],
+      "get": {
+        "summary": "List user confirmations",
+        "tags": [
+          "confirmation"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmationCollectionResponse"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "list-user-confirmations",
+        "description": "Gives a historic record of the user's attendance confirmations to parties, and subsequent scoring, sorted in descending chronological order.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ]
+      }
     },
     "/announcement": {
       "get": {
@@ -210,6 +320,9 @@
               }
             }
           },
+          "304": {
+            "description": "Not Modified"
+          },
           "400": {
             "description": "Bad Request"
           },
@@ -226,11 +339,17 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "list-announcement",
+        "operationId": "list-announcements",
         "description": "Lists all announcements currently visible. That is, announcements active at the present time for anonymous and normal users and all existing announcements for admin users.",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
           }
         ],
         "tags": [
@@ -262,6 +381,9 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
           },
           "500": {
             "description": "Internal Server Error"
@@ -305,6 +427,24 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "operationId": "get-announcement-id",
@@ -376,13 +516,37 @@
                 "$ref": "#/components/headers/eTagHeader"
               }
             }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
-        "operationId": "list-party",
+        "operationId": "list-parties",
         "description": "Lists existing parties.",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
           }
         ]
       },
@@ -414,8 +578,8 @@
           "403": {
             "description": "Forbidden"
           },
-          "404": {
-            "description": "Not Found"
+          "409": {
+            "description": "Conflict"
           },
           "500": {
             "description": "Internal Server Error"
@@ -439,7 +603,7 @@
     "/party/{party}/confirmation": {
       "post": {
         "summary": "Confirm assistance",
-        "operationId": "post-confirmation",
+        "operationId": "post-party-confirmation",
         "responses": {
           "201": {
             "description": "Created",
@@ -468,6 +632,9 @@
           "404": {
             "description": "Not Found"
           },
+          "409": {
+            "description": "Conflict"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -491,30 +658,68 @@
       },
       "parameters": [
         {
-          "schema": {
-            "type": "integer",
-            "format": "int64",
-            "minimum": 0
-          },
-          "name": "party",
-          "in": "path",
-          "required": true,
-          "description": "ID of a party."
+          "$ref": "#/components/parameters/idPartyParameter"
         }
-      ]
+      ],
+      "get": {
+        "summary": "List confirmations for a party",
+        "operationId": "list-party-confirmations",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmationCollectionResponse"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "List all attendance confirmations submitted for a certain party.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "tags": [
+          "confirmation"
+        ]
+      }
     },
     "/party/{party}/confirmation/{id}": {
       "parameters": [
         {
-          "schema": {
-            "type": "integer",
-            "format": "int64",
-            "minimum": 0
-          },
-          "name": "party",
-          "in": "path",
-          "required": true,
-          "description": "ID of a party."
+          "$ref": "#/components/parameters/idPartyParameter"
         },
         {
           "$ref": "#/components/parameters/idParameter"
@@ -532,6 +737,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "Not Modified"
           },
           "400": {
             "description": "Bad Request"
@@ -552,7 +760,12 @@
         "operationId": "get-confirmation-id",
         "description": "Gets a confirmation given its ID.",
         "tags": [
-          "party"
+          "confirmation"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
         ]
       },
       "delete": {
@@ -591,6 +804,735 @@
           "party"
         ]
       }
+    },
+    "/party/{party}/confirmation/{confirmation}/user": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/idPartyParameter"
+        },
+        {
+          "$ref": "#/components/parameters/idConfirmationParameter"
+        }
+      ],
+      "post": {
+        "summary": "Add user to an attendance confirmation photo",
+        "operationId": "post-user-confirmation",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Confirmation"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Allows to add an user to a confirmation photo. Upon addition, the confirmation object is returned.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttendanceCreation"
+              }
+            }
+          }
+        },
+        "tags": [
+          "confirmation"
+        ]
+      }
+    },
+    "/party/{party}/confirmation/{confirmation}/user/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/idPartyParameter"
+        },
+        {
+          "$ref": "#/components/parameters/idConfirmationParameter"
+        },
+        {
+          "$ref": "#/components/parameters/idParameter"
+        }
+      ],
+      "delete": {
+        "summary": "Delete user from attendance confirmation",
+        "operationId": "delete-user-confirmation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Confirmation"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "description": "Removes an user from an attendance confirmation photo. Upon removal, the confirmation object is returned.",
+        "tags": [
+          "confirmation"
+        ]
+      }
+    },
+    "/partyType": {
+      "get": {
+        "summary": "List party types",
+        "tags": [
+          "partyType"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyTypeCollectionResponse"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "list-partyTypes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "description": "List existing party types."
+      },
+      "post": {
+        "summary": "Create party type",
+        "operationId": "post-partyType",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyType"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PartyType"
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "description": "Allows addition of new party types.",
+        "tags": [
+          "partyType"
+        ]
+      }
+    },
+    "/partyType/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/idParameter"
+        }
+      ],
+      "get": {
+        "summary": "Get party type by ID",
+        "tags": [
+          "partyType"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyType"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "get-partyType-id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ],
+        "description": "Gets an party type given its ID."
+      },
+      "delete": {
+        "summary": "Delete party type",
+        "operationId": "delete-partyType-id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Removes a party type given its ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "tags": [
+          "partyType"
+        ]
+      }
+    },
+    "/extra": {
+      "get": {
+        "summary": "List extra bonus types",
+        "tags": [
+          "extra"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraCollectionResponse"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "list-extras",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "description": "List existing extra points."
+      },
+      "post": {
+        "summary": "Create extra bonus type",
+        "operationId": "post-extra",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Extra"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Allows addition of new bonus types.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Extra"
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "tags": [
+          "extra"
+        ]
+      }
+    },
+    "/extra/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Get extra bonus type by ID",
+        "tags": [
+          "extra"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Extra"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "get-extra-id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ],
+        "description": "Gets an extra bonus type given its ID."
+      },
+      "delete": {
+        "summary": "Delete extra bonus type by ID",
+        "operationId": "delete-extra-id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Removes an extra bonus type given its ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "tags": [
+          "extra"
+        ]
+      }
+    },
+    "/officialParty": {
+      "get": {
+        "summary": "List official parties",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfficialPartyCollectionReponse"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "list-official-parties",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
+        "description": "List all known official parties.",
+        "tags": [
+          "officialParty"
+        ]
+      },
+      "post": {
+        "summary": "Create extra bonus type",
+        "operationId": "post-official-party",
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfficialParty"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Allows addition of new bonus types.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OfficialParty"
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "tags": [
+          "officialParty"
+        ]
+      }
+    },
+    "/officialParty/{id}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Get extra bonus type by ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfficialParty"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "get-official-party-id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ],
+        "description": "Gets an extra bonus type given its ID.",
+        "tags": [
+          "officialParty"
+        ]
+      },
+      "delete": {
+        "summary": "Delete extra bonus type by ID",
+        "operationId": "delete-official-party-id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Removes an extra bonus type given its ID.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "tags": [
+          "officialParty"
+        ]
+      }
     }
   },
   "components": {
@@ -599,7 +1541,7 @@
         "type": "integer",
         "title": "EntityId",
         "format": "int64",
-        "description": "Entity identifier.",
+        "description": "Unique identifier of an entity.",
         "minimum": 0
       },
       "PageMetadata": {
@@ -720,7 +1662,11 @@
           "metadata": {
             "$ref": "#/components/schemas/PageMetadata"
           }
-        }
+        },
+        "required": [
+          "data",
+          "metadata"
+        ]
       },
       "User": {
         "title": "User",
@@ -808,7 +1754,11 @@
           "metadata": {
             "$ref": "#/components/schemas/PageMetadata"
           }
-        }
+        },
+        "required": [
+          "data",
+          "metadata"
+        ]
       },
       "Announcement": {
         "title": "Announcement",
@@ -855,7 +1805,7 @@
           "location": {
             "type": "string",
             "minLength": 1,
-            "description": "Geographical location of this announcement."
+            "description": "Geographical location of this announcement. Unique textual identifier for Google's Places API."
           }
         },
         "required": [
@@ -898,20 +1848,12 @@
           },
           "announcement": {
             "$ref": "#/components/schemas/Announcement"
-          },
-          "confirmations": {
-            "type": "array",
-            "description": "List of confirmations for this party.",
-            "items": {
-              "$ref": "#/components/schemas/Confirmation"
-            }
           }
         },
         "required": [
           "id",
           "type",
-          "announcement",
-          "confirmations"
+          "announcement"
         ]
       },
       "PartyCreation": {
@@ -935,15 +1877,67 @@
           "type"
         ]
       },
+      "PartyTypeCollectionResponse": {
+        "title": "PartyTypeCollectionResponse",
+        "type": "object",
+        "description": "Paged collection response for party type list requests. Includes party type data and paging metadata.",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "List of existing party types.",
+            "items": {
+              "$ref": "#/components/schemas/PartyType"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        },
+        "required": [
+          "data",
+          "metadata"
+        ]
+      },
       "PartyType": {
-        "type": "string",
+        "type": "object",
         "title": "PartyType",
-        "enum": [
-          "STANDARD",
-          "OFFICIAL",
-          "INTERNATIONAL"
-        ],
-        "description": "Describes the possible types of parties."
+        "description": "Describes the possible types of parties.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Short name of this party type",
+            "minLength": 1
+          },
+          "points": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Base points granted by this party type"
+          }
+        },
+        "required": [
+          "name",
+          "points"
+        ]
+      },
+      "ConfirmationCollectionResponse": {
+        "title": "ConfirmationCollectionResponse",
+        "type": "object",
+        "description": "Paged collection response for attendance confirmation list requests. Includes confirmation data and paging metadata.",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Confirmation"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        },
+        "required": [
+          "data",
+          "metadata"
+        ]
       },
       "Confirmation": {
         "title": "Confirmation",
@@ -952,6 +1946,9 @@
         "properties": {
           "id": {
             "$ref": "#/components/schemas/EntityId"
+          },
+          "party": {
+            "$ref": "#/components/schemas/Party"
           },
           "photo": {
             "type": "string",
@@ -963,12 +1960,13 @@
             "description": "List of user IDs of those present in the picture.",
             "minItems": 1,
             "items": {
-              "$ref": "#/components/schemas/EntityId"
+              "$ref": "#/components/schemas/Attendance"
             }
           }
         },
         "required": [
           "id",
+          "party",
           "photo",
           "attenders"
         ]
@@ -990,6 +1988,156 @@
         "required": [
           "id",
           "photo"
+        ]
+      },
+      "Attendance": {
+        "title": "Attendance",
+        "type": "object",
+        "description": "Represents the joining of a user and the extras gained by them by attending a certain party.",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "extras": {
+            "type": "array",
+            "description": "List of extras included with this attendance.",
+            "items": {
+              "$ref": "#/components/schemas/Extra"
+            }
+          },
+          "points": {
+            "type": "integer",
+            "description": "Points earned by the user by this attendance.",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "user",
+          "extras",
+          "points"
+        ]
+      },
+      "AttendanceCreation": {
+        "title": "AttendanceCreation",
+        "type": "object",
+        "description": "Represents the joining of a user and the extras gained by them by attending a certain party. Model used for creating attendance entries in a confirmation object, using only IDs of referenced data.",
+        "properties": {
+          "userId": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "extraIds": {
+            "type": "array",
+            "description": "List of extras included with this attendance.",
+            "items": {
+              "$ref": "#/components/schemas/EntityId"
+            }
+          }
+        },
+        "required": [
+          "userId",
+          "extraIds"
+        ]
+      },
+      "ExtraCollectionResponse": {
+        "title": "ExtraCollectionResponse",
+        "type": "object",
+        "description": "Paged collection response for extra scoring list requests. Includes extra scoring data and paging metadata.",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "List of existing extras.",
+            "items": {
+              "$ref": "#/components/schemas/Extra"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        },
+        "required": [
+          "data",
+          "metadata"
+        ]
+      },
+      "Extra": {
+        "title": "Extra",
+        "type": "object",
+        "description": "Represents a scoring bonus given to a user for attendance to a certain party.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the bonus."
+          },
+          "points": {
+            "type": "integer",
+            "description": "Point value of the bonus."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "points"
+        ]
+      },
+      "OfficialPartyCollectionReponse": {
+        "title": "OfficialPartyCollectionResponse",
+        "type": "object",
+        "description": "Paged collection response for official party list requests. Includes official party data and paging metadata.",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "List of known official parties.",
+            "items": {
+              "$ref": "#/components/schemas/OfficialParty"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        },
+        "required": [
+          "data",
+          "metadata"
+        ]
+      },
+      "OfficialParty": {
+        "title": "OfficialParty",
+        "type": "object",
+        "description": "Model for an official party, having special scoring scheme for its duration.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of this official party.",
+            "minLength": 1
+          },
+          "location": {
+            "type": "string",
+            "description": "Geographical location of this official party. Unique textual identifier for Google's Places API.",
+            "minLength": 1
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Starting date of this official party."
+          },
+          "duration": {
+            "type": "integer",
+            "format": "duration",
+            "description": "Number of days this official party takes place."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "location",
+          "startDate",
+          "duration"
         ]
       }
     },
@@ -1030,6 +2178,32 @@
           "example": 1752567
         },
         "description": "Identifier for an entity in the system, passed as a path parameter."
+      },
+      "idPartyParameter": {
+        "name": "party",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "minLength": 1,
+          "format": "int64",
+          "minimum": 0,
+          "example": 3456092
+        },
+        "description": "Identifier for a party, passed as a path parameter."
+      },
+      "idConfirmationParameter": {
+        "name": "confirmation",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "minLength": 1,
+          "format": "int64",
+          "minimum": 0,
+          "example": 1200107
+        },
+        "description": "Identifier for an attendance confirmation, passed as a path parameter."
       },
       "ifNoneMatchHeader": {
         "name": "If-None-Match",
@@ -1079,7 +2253,19 @@
       "name": "announcement"
     },
     {
+      "name": "confirmation"
+    },
+    {
+      "name": "extra"
+    },
+    {
+      "name": "officialParty"
+    },
+    {
       "name": "party"
+    },
+    {
+      "name": "partyType"
     },
     {
       "name": "ranking"
