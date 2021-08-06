@@ -2,13 +2,14 @@
 const Service = require('./Service');
 
 /**
-* Removes an announcement.
+* Delete extra bonus type by ID
+* Removes an extra bonus type given its ID.
 *
 * id String 
 * ifMatch List The If-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource only if it matches one of the listed ETags. For PUT and other non-safe methods, it will only upload the resource in this case. (optional)
 * no response value expected for this operation
 * */
-const deleteAnnouncementId = ({ id, ifMatch }) => new Promise(
+const deleteExtraId = ({ id, ifMatch }) => new Promise(
   async (resolve, reject) => {
     try {
       resolve(Service.successResponse({
@@ -24,14 +25,14 @@ const deleteAnnouncementId = ({ id, ifMatch }) => new Promise(
   },
 );
 /**
-* Get announcement details
-* Gets data about an announcement given its ID.
+* Get extra bonus type by ID
+* Gets an extra bonus type given its ID.
 *
 * id String 
 * ifNoneMatch List The If-None-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource, with a 200 status, only if it doesn't have an ETag matching the given ones. For other methods, the request will be processed only if the eventually existing resource's ETag doesn't match any of the values listed. (optional)
-* returns Announcement
+* returns Extra
 * */
-const getAnnouncementId = ({ id, ifNoneMatch }) => new Promise(
+const getExtraId = ({ id, ifNoneMatch }) => new Promise(
   async (resolve, reject) => {
     try {
       resolve(Service.successResponse({
@@ -47,15 +48,15 @@ const getAnnouncementId = ({ id, ifNoneMatch }) => new Promise(
   },
 );
 /**
-* Query announcement list
-* Lists all announcements currently visible. That is, announcements active at the present time for anonymous and normal users and all existing announcements for admin users.
+* List extra bonus types
+* List existing extra points.
 *
 * ifNoneMatch List The If-None-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource, with a 200 status, only if it doesn't have an ETag matching the given ones. For other methods, the request will be processed only if the eventually existing resource's ETag doesn't match any of the values listed. (optional)
 * limit Long Number of elements to return in a collection request. (optional)
 * offset Long Number of elements to skip in a collection request. (optional)
-* returns AnnouncementCollectionResponse
+* returns ExtraCollectionResponse
 * */
-const listAnnouncements = ({ ifNoneMatch, limit, offset }) => new Promise(
+const listExtras = ({ ifNoneMatch, limit, offset }) => new Promise(
   async (resolve, reject) => {
     try {
       resolve(Service.successResponse({
@@ -72,17 +73,17 @@ const listAnnouncements = ({ ifNoneMatch, limit, offset }) => new Promise(
   },
 );
 /**
-* Create announcement
-* Creates a new announcement. This endpoint is only available to authenticated users.
+* Create extra bonus type
+* Allows addition of new bonus types.
 *
-* announcementCreation AnnouncementCreation  (optional)
-* returns Announcement
+* extra Extra  (optional)
+* returns Extra
 * */
-const postAnnouncement = ({ announcementCreation }) => new Promise(
+const postExtra = ({ extra }) => new Promise(
   async (resolve, reject) => {
     try {
       resolve(Service.successResponse({
-        announcementCreation,
+        extra,
       }));
     } catch (e) {
       reject(Service.rejectResponse(
@@ -94,8 +95,8 @@ const postAnnouncement = ({ announcementCreation }) => new Promise(
 );
 
 module.exports = {
-  deleteAnnouncementId,
-  getAnnouncementId,
-  listAnnouncements,
-  postAnnouncement,
+  deleteExtraId,
+  getExtraId,
+  listExtras,
+  postExtra,
 };
