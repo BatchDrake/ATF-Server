@@ -23,6 +23,10 @@
 #!docs/README.md
 
 # Ignore all files that should not be generated
+.gitignore
+.babelrc
+.travis.yml
+mocha.opts
 package.json
 README.md
 git_push.sh
