@@ -12,27 +12,22 @@ const deleteConfirmationId = async (request, response) => {
   await Controller.handleRequest(request, response, service.deleteConfirmationId);
 };
 
-const getConfirmationId = async (request, response) => {
-  await Controller.handleRequest(request, response, service.getConfirmationId);
-};
-
-const listParty = async (request, response) => {
-  await Controller.handleRequest(request, response, service.listParty);
-};
-
-const postConfirmation = async (request, response) => {
-  await Controller.handleRequest(request, response, service.postConfirmation);
+const listParties = async (request, response) => {
+  await Controller.handleRequest(request, response, service.listParties);
 };
 
 const postParty = async (request, response) => {
   await Controller.handleRequest(request, response, service.postParty);
 };
 
+const postPartyConfirmation = async (request, response) => {
+  await Controller.handleRequest(request, response, service.postPartyConfirmation);
+};
+
 
 module.exports = {
   deleteConfirmationId,
-  getConfirmationId,
-  listParty,
-  postConfirmation,
+  listParties,
   postParty,
+  postPartyConfirmation,
 };

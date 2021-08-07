@@ -3,16 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.15",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "bootstrap": "^5.0.2",
     "react": "^17.0.2",
+    "react-bootstrap": "^2.0.0-beta.4",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "generate": "npx @openapitools/openapi-generator-cli generate -i ../api/rest/atf-server.json -g typescript-fetch -o src",
+    "generate": "npx openapi-generator-cli generate -i ../api/rest/atf-server.json -g javascript -o .",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -37,6 +43,6 @@
     ]
   },
   "devDependencies": {
-    "typescript": "^4.3.5"
+    "@openapitools/openapi-generator-cli": "^2.3.9"
   }
 }

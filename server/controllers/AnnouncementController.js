@@ -16,8 +16,8 @@ const getAnnouncementId = async (request, response) => {
   await Controller.handleRequest(request, response, service.getAnnouncementId);
 };
 
-const listAnnouncement = async (request, response) => {
-  await Controller.handleRequest(request, response, service.listAnnouncement);
+const listAnnouncements = async (request, response) => {
+  await Controller.handleRequest(request, response, service.listAnnouncements);
 };
 
 const postAnnouncement = async (request, response) => {
@@ -28,6 +28,6 @@ const postAnnouncement = async (request, response) => {
 module.exports = {
   deleteAnnouncementId,
   getAnnouncementId,
-  listAnnouncement,
+  listAnnouncements,
   postAnnouncement,
 };

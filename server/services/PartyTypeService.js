@@ -2,13 +2,14 @@
 const Service = require('./Service');
 
 /**
-* Removes an announcement.
+* Delete party type
+* Removes a party type given its ID.
 *
-* id String 
+* id Long Identifier for an entity in the system, passed as a path parameter.
 * ifMatch List The If-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource only if it matches one of the listed ETags. For PUT and other non-safe methods, it will only upload the resource in this case. (optional)
 * no response value expected for this operation
 * */
-const deleteAnnouncementId = ({ id, ifMatch }) => new Promise(
+const deletePartyTypeId = ({ id, ifMatch }) => new Promise(
   async (resolve, reject) => {
     try {
       resolve(Service.successResponse({
@@ -24,14 +25,14 @@ const deleteAnnouncementId = ({ id, ifMatch }) => new Promise(
   },
 );
 /**
-* Get announcement details
-* Gets data about an announcement given its ID.
+* Get party type by ID
+* Gets an party type given its ID.
 *
-* id String 
+* id Long Identifier for an entity in the system, passed as a path parameter.
 * ifNoneMatch List The If-None-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource, with a 200 status, only if it doesn't have an ETag matching the given ones. For other methods, the request will be processed only if the eventually existing resource's ETag doesn't match any of the values listed. (optional)
-* returns Announcement
+* returns PartyType
 * */
-const getAnnouncementId = ({ id, ifNoneMatch }) => new Promise(
+const getPartyTypeId = ({ id, ifNoneMatch }) => new Promise(
   async (resolve, reject) => {
     try {
       resolve(Service.successResponse({
@@ -47,15 +48,15 @@ const getAnnouncementId = ({ id, ifNoneMatch }) => new Promise(
   },
 );
 /**
-* Query announcement list
-* Lists all announcements currently visible. That is, announcements active at the present time for anonymous and normal users and all existing announcements for admin users.
+* List party types
+* List existing party types.
 *
 * ifNoneMatch List The If-None-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource, with a 200 status, only if it doesn't have an ETag matching the given ones. For other methods, the request will be processed only if the eventually existing resource's ETag doesn't match any of the values listed. (optional)
 * limit Long Number of elements to return in a collection request. (optional)
 * offset Long Number of elements to skip in a collection request. (optional)
-* returns AnnouncementCollectionResponse
+* returns PartyTypeCollectionResponse
 * */
-const listAnnouncements = ({ ifNoneMatch, limit, offset }) => new Promise(
+const listPartyTypes = ({ ifNoneMatch, limit, offset }) => new Promise(
   async (resolve, reject) => {
     try {
       resolve(Service.successResponse({
@@ -72,17 +73,17 @@ const listAnnouncements = ({ ifNoneMatch, limit, offset }) => new Promise(
   },
 );
 /**
-* Create announcement
-* Creates a new announcement. This endpoint is only available to authenticated users.
+* Create party type
+* Allows addition of new party types.
 *
-* announcementCreation AnnouncementCreation  (optional)
-* returns Announcement
+* partyType PartyType  (optional)
+* returns PartyType
 * */
-const postAnnouncement = ({ announcementCreation }) => new Promise(
+const postPartyType = ({ partyType }) => new Promise(
   async (resolve, reject) => {
     try {
       resolve(Service.successResponse({
-        announcementCreation,
+        partyType,
       }));
     } catch (e) {
       reject(Service.rejectResponse(
@@ -94,8 +95,8 @@ const postAnnouncement = ({ announcementCreation }) => new Promise(
 );
 
 module.exports = {
-  deleteAnnouncementId,
-  getAnnouncementId,
-  listAnnouncements,
-  postAnnouncement,
+  deletePartyTypeId,
+  getPartyTypeId,
+  listPartyTypes,
+  postPartyType,
 };
