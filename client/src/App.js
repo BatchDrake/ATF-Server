@@ -20,35 +20,37 @@ function App() {
     <Router>
       <Container fluid id="page">
         <Menu />
-        <Switch>
-          <Route path="/ranking">
-            <RankingPage />
-          </Route>
-          <Route path="/history">
-            <HistoryPage />
-          </Route>
-          <Route path="/announcements">
-            <AnnouncementsPage />
-          </Route>
-          <Route path="/invites">
-            <InvitesPage />
-          </Route>
-          <Route path="/admin/scores">
-            <ScoresPage />
-          </Route>
-          <Route path="/admin/parties">
-            <PartiesPage />
-          </Route>
-          <Route path="/admin/users">
-            <UsersPage />
-          </Route>
-          <Route path="/profile">
-            <ProfilePage />
-          </Route>
-          <Route path="/">
-            <RankingPage />
-          </Route>
-        </Switch>
+        <Container id="content">
+          <Switch>
+            <Route path="/ranking">
+              <RankingPage />
+            </Route>
+            <Route path="/history">
+              <HistoryPage />
+            </Route>
+            <Route path="/announcements">
+              <AnnouncementsPage />
+            </Route>
+            <Route path="/invites">
+              <InvitesPage />
+            </Route>
+            <Route path="/admin/scores">
+              <ScoresPage />
+            </Route>
+            <Route path="/admin/parties">
+              <PartiesPage />
+            </Route>
+            <Route path="/admin/users">
+              <UsersPage />
+            </Route>
+            <Route path="/profile">
+              <ProfilePage />
+            </Route>
+            <Route path="/">
+              <RankingPage />
+            </Route>
+          </Switch>
+        </Container>
       </Container>
     </Router>
   );

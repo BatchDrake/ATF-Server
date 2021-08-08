@@ -29,13 +29,17 @@ const getUserId = ({ id, ifNoneMatch }) => new Promise(
 * List existing users.
 *
 * ifNoneMatch List The If-None-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource, with a 200 status, only if it doesn't have an ETag matching the given ones. For other methods, the request will be processed only if the eventually existing resource's ETag doesn't match any of the values listed. (optional)
+* limit Long Number of elements to return in a collection request. (optional)
+* offset Long Number of elements to skip in a collection request. (optional)
 * returns UserCollectionResponse
 * */
-const listUsers = ({ ifNoneMatch }) => new Promise(
+const listUsers = ({ ifNoneMatch, limit, offset }) => new Promise(
   async (resolve, reject) => {
     try {
       resolve(Service.successResponse({
         ifNoneMatch,
+        limit,
+        offset,
       }));
     } catch (e) {
       reject(Service.rejectResponse(
