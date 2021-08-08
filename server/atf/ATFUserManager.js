@@ -16,7 +16,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-require("./DataSource");
+const DataSource = require("./DataSource");
+const crypto = require('crypto');
+const ImageManager = require("./ImageManager");
 
 const USER_AUTH_NONE        = 0;
 const USER_AUTH_PARTICIPANT = 1;
@@ -52,35 +54,101 @@ class ATFUserConflictException {
     }
 }
 
+class ATFUser {
+    constructor(sqlRow) {
+        this.id        = sqlRow.externalid;
+        this.name      = sqlRow.nombre;
+        this.score     = sqlRow.puntis;
+        this.victories = sqlRow.awards;
+        this.avatar    = ImageManager.avatarPath(sqlRow.avatar);
+        this.invites   = sqlRow.invites;
+    }
+
+    static fromMultipleRows(rows) {
+        var converted = new Array(rows.length);
+
+        for (var i = 0; i < rows.length; ++i)
+            converted[i] = new ATFUser(rows[i]);
+
+        return converted;
+    }
+
+    serialize() {
+        return JSON.stringify(this);
+    }
+}
+
 class ATFUserManager {
+    constructor(user, token) {
+        this.authLevel = this.getAuthLevel(user, token);
+
+    }
+
     getAuthLevel(user, token) {
         // TODO: Parse token, extract salt and hashed password, rehash
         // Return USER_AUTH_ accordingly
 
-        return Promise.resolve(USER_AUTH_ADMIN);
+        const fields = token.split("$");
+        
+        try {
+            if (fields.length != 2)
+                throw "Malformed authentication token";
+            
+            const salt = Buffer.from(fields[0], 'base64');
+            const hash = fields[1];
+        } catch {
+            return USER_AUTH_NONE;
+        }
+
+        return DataSource.getInstance().query(
+            "SELECT `password`,`isadmin` FROM `UserCreds` WHERE `user` = ?;", [user])
+            .then(rows => {
+                try {
+                    const pwdHash = Buffer.from(rows[0].password, 'hex');
+                } catch {
+                    return USER_AUTH_NONE;
+                }
+
+                const calculatedHash = 
+                        crypto.createHash('sha256')
+                        .update(salt)
+                        .update(pwdHash)
+                        .digest('base64');
+
+                if (calculatedHash !== hash)
+                    return USER_AUTH_NONE;
+
+                return resut[0].isadmin
+                    ? USER_AUTH_ADMIN
+                    : USER_AUTH_PARTICIPANT;
+            });
     }
     
-    assertAuthLevel(user, token, minLevel) {
-        this.getAuthLevel(user, token).then(
+    assertAuthLevel(minLevel) {
+        return this.authLevel.then(
             userLevel => {
                 if (userLevel < minLevel) 
                     throw ATFUserExistsException; 
                 return userLevel});
     }
 
-    getUserList(pagingData) {
-        // Implement me
-        return Promise.resolve([]);
+    getUserList(offset, limit) {
+        return DataSource.getInstance().query(
+                DataSource.buildLimitedQuery(
+                    "SELECT * FROM `User`", offset, limit))
+                .then(rows => ATFUser.fromMultipleRows(rows));
     }
     
     getUser(id) {
-        // Implement me
-        return Promise.resolve({});
+        return DataSource.getInstance().query(
+            "SELECT * FROM `User` WHERE `externalid` = ?;", [id])
+            .then(rows => new ATFUser(rows[0]));
     }
 
     userExists(email) {
-        // Implement me
-        return Promise.resolve(false);
+        return this.assertAuthLevel(USER_AUTH_PARTICIPANT)
+            .then("SELECT EXISTS(SELECT * FROM `UserCreds` WHERE `user` = ? LIMIT 1) AS `exists`", [email])
+            .then(rows => rows[0].exists > 0);
     }
 
     registerUser(userObject) {
@@ -88,3 +156,5 @@ class ATFUserManager {
         return Promise.resolve({});
     }
 }
+
+module.exports = ATFUserManager;

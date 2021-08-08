@@ -39,8 +39,12 @@ class DataSourceImpl {
             c => this.connection.query("USE `" + DATA_SOURCE_DATABASE + "`;"));
     }
 
-    query(queryString) {
-        return this.queryPromise.then(x => this.connection.query(queryString));
+    query(...queryArgs) {
+        return this.queryPromise.then(x => this.connection.query(...queryArgs));
+    }
+
+    static buildLimitedQuery(queryString, offset, limit) {
+        return queryString + " LIMIT " + offset + "," + limit + ";";
     }
 }
 
@@ -58,6 +62,10 @@ class DataSource {
                 DATA_SOURCE_PASSWORD);
 
         return this.instance;
+    }
+
+    static buildLimitedQuery(queryString, offset, limit) {
+        return DataSourceImpl.buildLimitedQuery(queryString, offset, limit);
     }
 }
 
