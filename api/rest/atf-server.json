@@ -23,7 +23,7 @@
       "parameters": [],
       "post": {
         "summary": "",
-        "operationId": "account-logout",
+        "operationId": "accountLogout",
         "responses": {
           "200": {
             "description": "OK"
@@ -53,7 +53,7 @@
       "parameters": [],
       "put": {
         "summary": "",
-        "operationId": "account-change-password",
+        "operationId": "accountChangePassword",
         "responses": {
           "200": {
             "description": "OK"
@@ -94,7 +94,7 @@
     "/account/reset": {
       "post": {
         "summary": "",
-        "operationId": "request-account-reset",
+        "operationId": "requestAccountReset",
         "responses": {
           "202": {
             "description": "Accepted"
@@ -124,7 +124,7 @@
     "/account/reset/{token}": {
       "put": {
         "summary": "",
-        "operationId": "account-reset",
+        "operationId": "accountReset",
         "responses": {
           "200": {
             "description": "OK"
@@ -207,7 +207,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "list-ranking",
+        "operationId": "listRanking",
         "description": "Gives access to the current contest ranking.",
         "parameters": [
           {
@@ -263,7 +263,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "list-users",
+        "operationId": "listUsers",
         "description": "List existing users.",
         "parameters": [
           {
@@ -279,7 +279,7 @@
       },
       "post": {
         "summary": "Create user",
-        "operationId": "post-user",
+        "operationId": "postUser",
         "responses": {
           "201": {
             "description": "Created",
@@ -374,7 +374,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "get-user-id",
+        "operationId": "getUserId",
         "description": "Get an user.",
         "parameters": [
           {
@@ -444,7 +444,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "list-user-confirmations",
+        "operationId": "listUserConfirmations",
         "description": "Gives a historic record of the user's attendance confirmations to parties, and subsequent scoring, sorted in descending chronological order.",
         "parameters": [
           {
@@ -497,7 +497,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "list-announcements",
+        "operationId": "listAnnouncements",
         "description": "Lists all announcements currently visible. That is, announcements active at the present time for anonymous and normal users and all existing announcements for admin users.",
         "parameters": [
           {
@@ -516,7 +516,7 @@
       },
       "post": {
         "summary": "Create announcement",
-        "operationId": "post-announcement",
+        "operationId": "postAnnouncement",
         "responses": {
           "201": {
             "description": "Created",
@@ -610,7 +610,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "get-announcement-id",
+        "operationId": "getAnnouncementId",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
@@ -623,7 +623,7 @@
       },
       "delete": {
         "summary": "",
-        "operationId": "delete-announcement-id",
+        "operationId": "deleteAnnouncementId",
         "responses": {
           "200": {
             "description": "OK"
@@ -704,7 +704,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "list-parties",
+        "operationId": "listParties",
         "description": "Lists existing parties.",
         "parameters": [
           {
@@ -720,7 +720,7 @@
       },
       "post": {
         "summary": "",
-        "operationId": "post-party",
+        "operationId": "postParty",
         "responses": {
           "201": {
             "description": "Created",
@@ -776,7 +776,7 @@
     "/party/{party}/confirmation": {
       "post": {
         "summary": "Confirm assistance",
-        "operationId": "post-party-confirmation",
+        "operationId": "postPartyConfirmation",
         "responses": {
           "201": {
             "description": "Created",
@@ -841,7 +841,7 @@
       ],
       "get": {
         "summary": "List confirmations for a party",
-        "operationId": "list-party-confirmations",
+        "operationId": "listPartyConfirmations",
         "responses": {
           "200": {
             "description": "OK",
@@ -935,7 +935,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "get-confirmation-id",
+        "operationId": "getConfirmationId",
         "description": "Gets a confirmation given its ID.",
         "tags": [
           "confirmation"
@@ -948,7 +948,7 @@
       },
       "delete": {
         "summary": "Remove a confirmation",
-        "operationId": "delete-confirmation-id",
+        "operationId": "deleteConfirmationId",
         "responses": {
           "200": {
             "description": "OK"
@@ -999,7 +999,7 @@
       ],
       "post": {
         "summary": "Add user to an attendance confirmation photo",
-        "operationId": "post-user-confirmation",
+        "operationId": "postUserConfirmation",
         "responses": {
           "201": {
             "description": "Created",
@@ -1074,7 +1074,7 @@
       ],
       "delete": {
         "summary": "Delete user from attendance confirmation",
-        "operationId": "delete-user-confirmation",
+        "operationId": "deleteUserConfirmation",
         "responses": {
           "200": {
             "description": "OK",
@@ -1167,7 +1167,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "list-partyTypes",
+        "operationId": "listPartyTypes",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
@@ -1183,7 +1183,7 @@
       },
       "post": {
         "summary": "Create party type",
-        "operationId": "post-partyType",
+        "operationId": "postPartyType",
         "responses": {
           "201": {
             "description": "Created",
@@ -1283,7 +1283,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "get-partyType-id",
+        "operationId": "getPartyTypeId",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
@@ -1293,7 +1293,7 @@
       },
       "delete": {
         "summary": "Delete party type",
-        "operationId": "delete-partyType-id",
+        "operationId": "deletePartyTypeId",
         "responses": {
           "200": {
             "description": "OK"
@@ -1374,7 +1374,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "list-extras",
+        "operationId": "listExtras",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
@@ -1390,7 +1390,7 @@
       },
       "post": {
         "summary": "Create extra bonus type",
-        "operationId": "post-extra",
+        "operationId": "postExtra",
         "responses": {
           "201": {
             "description": "Created",
@@ -1495,7 +1495,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "get-extra-id",
+        "operationId": "getExtraId",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
@@ -1505,7 +1505,7 @@
       },
       "delete": {
         "summary": "Delete extra bonus type by ID",
-        "operationId": "delete-extra-id",
+        "operationId": "deleteExtraId",
         "responses": {
           "200": {
             "description": "OK"
@@ -1583,7 +1583,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "list-official-parties",
+        "operationId": "listOfficialParties",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
@@ -1602,7 +1602,7 @@
       },
       "post": {
         "summary": "Create extra bonus type",
-        "operationId": "post-official-party",
+        "operationId": "postOfficialParty",
         "responses": {
           "201": {
             "description": "Created",
@@ -1704,7 +1704,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "get-official-party-id",
+        "operationId": "getOfficialPartyId",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
@@ -1717,7 +1717,7 @@
       },
       "delete": {
         "summary": "Delete extra bonus type by ID",
-        "operationId": "delete-official-party-id",
+        "operationId": "deleteOfficialPartyId",
         "responses": {
           "200": {
             "description": "OK"
