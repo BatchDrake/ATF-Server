@@ -1,0 +1,40 @@
+.ranking__entry {
+  padding: 5px 0px 0px 0px;
+}
+
+.ranking__entry > hr {
+  margin-top: 1em;
+}
+
+.avatar {
+  margin-right: 0.5em;
+}
+
+.ranking-position {
+  font-size: 0.75em;
+  display: flex;
+  align-items: center;
+}
+
+.ranking-shift__arrow--rises {
+  color: green;
+}
+
+.ranking-shift__arrow--falls {
+  color: red;
+}
+
+.ranking-awards {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ranking-awards__star {
+  color: gold;
+}
+
+.ranking-score {
+  font-size: 0.75em;
+  display: flex;
+  align-items: center;
+}

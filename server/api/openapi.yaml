@@ -172,6 +172,7 @@ paths:
         "200":
           content:
             application/json:
+              examples: {}
               schema:
                 $ref: '#/components/schemas/RankingCollectionResponse'
           description: OK
@@ -213,6 +214,28 @@ paths:
             type: string
           type: array
         style: simple
+      - description: Number of elements to return in a collection request.
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 100
+          format: int64
+          minimum: 1
+          type: integer
+        style: form
+      - description: Number of elements to skip in a collection request.
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          format: int64
+          minimum: 0
+          type: integer
+        style: form
       responses:
         "200":
           content:
@@ -1905,6 +1928,17 @@ components:
       - total
       title: PageMetadata
       type: object
+      x-examples:
+        Example page metadata:
+          value:
+            count: 10
+            total: 50
+            first: http://example.com
+            previous: http://example.com
+            next: http://example.com
+            last: http://example.com
+            start: 1
+            finish: 10
     RankingCollectionResponse:
       description: Paged collection response for raking requests. Includes ranking
         data and paging metadata.
@@ -1923,6 +1957,9 @@ components:
             score: 1
             victories: 0
             name: name
+            location:
+              name: name
+              id: id
             id: 0
             avatar: https://openapi-generator.tech
           position: 0
@@ -1931,6 +1968,9 @@ components:
             score: 1
             victories: 0
             name: name
+            location:
+              name: name
+              id: id
             id: 0
             avatar: https://openapi-generator.tech
           position: 0
@@ -1948,6 +1988,27 @@ components:
       - metadata
       title: RankingCollectionResponse
       type: object
+      x-examples:
+        Example response:
+          value:
+            data:
+            - position: 0
+              variation: RISES
+              holder:
+                id: 0
+                name: string
+                avatar: http://example.com
+                score: 0
+                victories: 0
+            metadata:
+              count: 0
+              total: 0
+              first: http://example.com
+              previous: http://example.com
+              next: http://example.com
+              last: http://example.com
+              start: 0
+              finish: 0
     Ranking:
       description: Represents a position on the contest's ranking, always held by
         an user.
@@ -1956,6 +2017,9 @@ components:
           score: 1
           victories: 0
           name: name
+          location:
+            name: name
+            id: id
           id: 0
           avatar: https://openapi-generator.tech
         position: 0
@@ -1981,6 +2045,17 @@ components:
       - variation
       title: Ranking
       type: object
+      x-examples:
+        Example ranking:
+          value:
+            position: -9223372036854776000
+            variation: RISES
+            holder:
+              id: 0
+              name: string
+              avatar: http://example.com
+              score: 0
+              victories: 0
     UserCollectionResponse:
       description: Paged collection response for user list requests. Includes user
         profile data and paging metadata.
@@ -1998,11 +2073,17 @@ components:
         - score: 1
           victories: 0
           name: name
+          location:
+            name: name
+            id: id
           id: 0
           avatar: https://openapi-generator.tech
         - score: 1
           victories: 0
           name: name
+          location:
+            name: name
+            id: id
           id: 0
           avatar: https://openapi-generator.tech
       properties:
@@ -2024,6 +2105,9 @@ components:
         score: 1
         victories: 0
         name: name
+        location:
+          name: name
+          id: id
         id: 0
         avatar: https://openapi-generator.tech
       properties:
@@ -2051,20 +2135,34 @@ components:
           format: int64
           minimum: 0
           type: integer
+        location:
+          $ref: '#/components/schemas/Location'
       required:
       - avatar
       - id
+      - location
       - name
       - score
       - victories
       title: User
       type: object
+      x-examples:
+        Example:
+          value:
+            id: 0
+            name: string
+            avatar: http://example.com
+            score: -9223372036854776000
+            victories: 0
     UserCreation:
       description: Represents information about an user. This model is used for creating
         a new user in the system.
       example:
         password: password
         name: name
+        location:
+          name: name
+          id: id
         id: 0
         email: email
       properties:
@@ -2088,9 +2186,12 @@ components:
           format: password
           minLength: 8
           type: string
+        location:
+          $ref: '#/components/schemas/Location'
       required:
       - email
       - id
+      - location
       - name
       - password
       title: UserCreation
@@ -2114,18 +2215,28 @@ components:
             score: 1
             victories: 0
             name: name
+            location:
+              name: name
+              id: id
             id: 0
             avatar: https://openapi-generator.tech
-          location: location
+          location:
+            name: name
+            id: id
           id: 0
         - date: 2000-01-23
           announcer:
             score: 1
             victories: 0
             name: name
+            location:
+              name: name
+              id: id
             id: 0
             avatar: https://openapi-generator.tech
-          location: location
+          location:
+            name: name
+            id: id
           id: 0
       properties:
         data:
@@ -2148,9 +2259,14 @@ components:
           score: 1
           victories: 0
           name: name
+          location:
+            name: name
+            id: id
           id: 0
           avatar: https://openapi-generator.tech
-        location: location
+        location:
+          name: name
+          id: id
         id: 0
       properties:
         id:
@@ -2164,9 +2280,7 @@ components:
           format: date
           type: string
         location:
-          description: Geographical location of this announcement.
-          minLength: 1
-          type: string
+          $ref: '#/components/schemas/Location'
         announcer:
           $ref: '#/components/schemas/User'
       required:
@@ -2183,7 +2297,10 @@ components:
         the session information.
       example:
         date: 2000-01-23
-        location: location
+        partyTypeId: 0
+        location:
+          name: name
+          id: id
         id: 0
       properties:
         id:
@@ -2197,14 +2314,18 @@ components:
           format: date
           type: string
         location:
-          description: Geographical location of this announcement. Unique textual
-            identifier for Google's Places API.
-          minLength: 1
-          type: string
+          $ref: '#/components/schemas/Location'
+        partyTypeId:
+          description: Unique identifier of an entity.
+          format: int64
+          minimum: 0
+          title: EntityId
+          type: integer
       required:
       - date
       - id
       - location
+      - partyTypeId
       title: AnnouncementCreation
       type: object
     PartyCollectionResponse:
@@ -2231,9 +2352,14 @@ components:
               score: 1
               victories: 0
               name: name
+              location:
+                name: name
+                id: id
               id: 0
               avatar: https://openapi-generator.tech
-            location: location
+            location:
+              name: name
+              id: id
             id: 0
         - id: 0
           type:
@@ -2245,9 +2371,14 @@ components:
               score: 1
               victories: 0
               name: name
+              location:
+                name: name
+                id: id
               id: 0
               avatar: https://openapi-generator.tech
-            location: location
+            location:
+              name: name
+              id: id
             id: 0
       properties:
         data:
@@ -2275,9 +2406,14 @@ components:
             score: 1
             victories: 0
             name: name
+            location:
+              name: name
+              id: id
             id: 0
             avatar: https://openapi-generator.tech
-          location: location
+          location:
+            name: name
+            id: id
           id: 0
       properties:
         id:
@@ -2312,14 +2448,14 @@ components:
           minimum: 0
           title: EntityId
           type: integer
+        type:
+          $ref: '#/components/schemas/PartyType'
         announcement:
           description: Unique identifier of an entity.
           format: int64
           minimum: 0
           title: EntityId
           type: integer
-        type:
-          $ref: '#/components/schemas/PartyType'
       required:
       - announcement
       - id
@@ -2402,6 +2538,9 @@ components:
               score: 1
               victories: 0
               name: name
+              location:
+                name: name
+                id: id
               id: 0
               avatar: https://openapi-generator.tech
             points: 7
@@ -2416,6 +2555,9 @@ components:
               score: 1
               victories: 0
               name: name
+              location:
+                name: name
+                id: id
               id: 0
               avatar: https://openapi-generator.tech
             points: 7
@@ -2432,9 +2574,14 @@ components:
                 score: 1
                 victories: 0
                 name: name
+                location:
+                  name: name
+                  id: id
                 id: 0
                 avatar: https://openapi-generator.tech
-              location: location
+              location:
+                name: name
+                id: id
               id: 0
         - attenders:
           - extras:
@@ -2448,6 +2595,9 @@ components:
               score: 1
               victories: 0
               name: name
+              location:
+                name: name
+                id: id
               id: 0
               avatar: https://openapi-generator.tech
             points: 7
@@ -2462,6 +2612,9 @@ components:
               score: 1
               victories: 0
               name: name
+              location:
+                name: name
+                id: id
               id: 0
               avatar: https://openapi-generator.tech
             points: 7
@@ -2478,9 +2631,14 @@ components:
                 score: 1
                 victories: 0
                 name: name
+                location:
+                  name: name
+                  id: id
                 id: 0
                 avatar: https://openapi-generator.tech
-              location: location
+              location:
+                name: name
+                id: id
               id: 0
       properties:
         data:
@@ -2509,6 +2667,9 @@ components:
             score: 1
             victories: 0
             name: name
+            location:
+              name: name
+              id: id
             id: 0
             avatar: https://openapi-generator.tech
           points: 7
@@ -2523,6 +2684,9 @@ components:
             score: 1
             victories: 0
             name: name
+            location:
+              name: name
+              id: id
             id: 0
             avatar: https://openapi-generator.tech
           points: 7
@@ -2539,9 +2703,14 @@ components:
               score: 1
               victories: 0
               name: name
+              location:
+                name: name
+                id: id
               id: 0
               avatar: https://openapi-generator.tech
-            location: location
+            location:
+              name: name
+              id: id
             id: 0
       properties:
         id:
@@ -2600,6 +2769,9 @@ components:
           score: 1
           victories: 0
           name: name
+          location:
+            name: name
+            id: id
           id: 0
           avatar: https://openapi-generator.tech
         points: 7
@@ -2722,12 +2894,16 @@ components:
         data:
         - duration: 6
           name: name
-          location: location
+          location:
+            name: name
+            id: id
           id: 0
           startDate: 2000-01-23
         - duration: 6
           name: name
-          location: location
+          location:
+            name: name
+            id: id
           id: 0
           startDate: 2000-01-23
       properties:
@@ -2749,7 +2925,9 @@ components:
       example:
         duration: 6
         name: name
-        location: location
+        location:
+          name: name
+          id: id
         id: 0
         startDate: 2000-01-23
       properties:
@@ -2764,10 +2942,7 @@ components:
           minLength: 1
           type: string
         location:
-          description: Geographical location of this official party. Unique textual
-            identifier for Google's Places API.
-          minLength: 1
-          type: string
+          $ref: '#/components/schemas/Location'
         startDate:
           description: Starting date of this official party.
           format: date
@@ -2831,6 +3006,25 @@ components:
       required:
       - password
       title: PasswordReset
+      type: object
+    Location:
+      description: Represents a geographical location
+      example:
+        name: name
+        id: id
+      properties:
+        name:
+          description: Google Places API location identifier
+          maxLength: 255
+          type: string
+        id:
+          description: Location's name
+          maxLength: 255
+          type: string
+      required:
+      - id
+      - name
+      title: Location
       type: object
   securitySchemes:
     personalKey:
