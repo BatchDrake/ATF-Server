@@ -1,0 +1,8 @@
+.victories {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.victories__star {
+  color: gold;
+}

@@ -7,7 +7,7 @@
 }
 
 .avatar {
-  margin-right: 0.5em;
+  margin-right: 2em;
 }
 
 .ranking-position {
@@ -22,15 +22,6 @@
 
 .ranking-shift__arrow--falls {
   color: red;
-}
-
-.ranking-awards {
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.ranking-awards__star {
-  color: gold;
 }
 
 .ranking-score {

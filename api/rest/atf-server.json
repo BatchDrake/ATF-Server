@@ -15,10 +15,160 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://actinid.org:3000",
+      "description": "Actinid (Develop)"
     }
   ],
   "paths": {
+    "/account": {
+      "patch": {
+        "summary": "Update account information",
+        "operationId": "patch-account",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivate"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSelfUpdate"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "description": "Enables users to update their own user account information. This endpoint supports partial updates by sending only the keys and values that need to be updated.",
+        "tags": [
+          "account"
+        ]
+      },
+      "get": {
+        "summary": "Get account information",
+        "operationId": "get-account",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivate"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Enables users to receive information about their own user accounts.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ],
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/account/avatar": {
+      "post": {
+        "summary": "",
+        "operationId": "post-account-avatar",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivate"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "description": "Allows an user to update their own avatar image.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/account/logout": {
       "parameters": [],
       "post": {
@@ -264,7 +414,7 @@
           }
         },
         "operationId": "listUsers",
-        "description": "List existing users.",
+        "description": "List existing users' information, both public and private. This is an administrative endpoint.",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
@@ -312,7 +462,7 @@
             "description": "Internal Server Error"
           }
         },
-        "description": "Create a new user in the system.",
+        "description": "Create a new user in the system. This is an administrative endpoint.",
         "tags": [
           "user"
         ],
@@ -345,7 +495,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/UserPrivate"
                 }
               }
             },
@@ -375,7 +525,7 @@
           }
         },
         "operationId": "getUserId",
-        "description": "Get an user.",
+        "description": "Get all user's data, public and private for an user given their ID. This is an administrative endpoint.",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
@@ -386,7 +536,131 @@
         {
           "$ref": "#/components/parameters/idParameter"
         }
-      ]
+      ],
+      "patch": {
+        "summary": "Update user's account information",
+        "operationId": "patch-user-id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivate"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserAdminUpdate"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "description": "Update user's information. This is an administrative endpoint. This endpoint supports partial updates by sending only the keys and values that need to be updated.",
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/user/{id}/avatar": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "post": {
+        "summary": "Update user's avatar",
+        "operationId": "post-user-id-avatar",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivate"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "description": "Update user's avatar picture. This is an administrative endpoint. ",
+        "tags": [
+          "user"
+        ]
+      }
     },
     "/user/{id}/confirmation": {
       "parameters": [
@@ -1937,7 +2211,7 @@
             "type": "array",
             "description": "The list of users.",
             "items": {
-              "$ref": "#/components/schemas/User"
+              "$ref": "#/components/schemas/UserPrivate"
             }
           },
           "metadata": {
@@ -2002,6 +2276,55 @@
           "location"
         ]
       },
+      "UserPrivate": {
+        "title": "UserPrivate",
+        "type": "object",
+        "description": "This model represents an user for administrative purposes. It contains all information about an user, both public and private.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Display name of the user."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1,
+            "description": "New user's email."
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "avatar": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to the user's avatar.\n"
+          },
+          "score": {
+            "type": "integer",
+            "format": "int64",
+            "description": "User's current score."
+          },
+          "victories": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0,
+            "description": "Number of times this participant has won the contest."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "location",
+          "avatar",
+          "score",
+          "victories"
+        ]
+      },
       "UserCreation": {
         "title": "UserCreation",
         "type": "object",
@@ -2038,6 +2361,51 @@
           "password",
           "location"
         ]
+      },
+      "UserSelfUpdate": {
+        "title": "UpdateSelfUpdate",
+        "type": "object",
+        "description": "Model used to update an user's public profile. This allows for partial updates as fields can be individually sent to only update their individual values. The value of any field not sent will be preserved as it appears on the resources previous version.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Display name of the user."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1,
+            "description": "New user's email."
+          }
+        }
+      },
+      "UserAdminUpdate": {
+        "title": "UserAdminUpdate",
+        "type": "object",
+        "description": "Model used to update another user's profile from an administrator account. This allows for partial updates as fields can be individually sent to only update their individual values. The value of any field not sent will be preserved as it appears on the resources previous version.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Display name of the user."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1,
+            "description": "New user's email."
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "victories": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0,
+            "description": "Number of times this participant has won the contest."
+          }
+        }
       },
       "AnnouncementCollectionResponse": {
         "title": "AnnouncementCollectionResponse",

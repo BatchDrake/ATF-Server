@@ -3,17 +3,9 @@ import "./index.css";
 import React from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { Col, Image, Row } from "react-bootstrap";
-import {
-  faArrowDown,
-  faArrowUp,
-  faStar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
-function Victories({ amount }) {
-  return Array(amount).fill(
-    <Icon className="ranking-awards__star" icon={faStar} />
-  );
-}
+import Victories from "../../common/Victories";
 
 function Shift({ shift }) {
   switch (shift) {
@@ -46,11 +38,10 @@ function RankingEntry({ rank }) {
       <Col className="ranking-shift">
         <Shift shift={variation} />
       </Col>
-      <Col className="ranking-awards">
+      <Col>
         <Victories amount={holder.victories} />
       </Col>
       <Col className="ranking-score">{holder.score}</Col>
-      <hr />
     </Row>
   );
 }
