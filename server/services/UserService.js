@@ -1,5 +1,8 @@
 /* eslint-disable no-unused-vars */
 const Service = require('./Service');
+const ATFUserManager = require('../atf/ATFUserManager');
+
+anonymousUserManager = new ATFUserManager('', '');
 
 /**
 * Fetch user data
@@ -9,21 +12,14 @@ const Service = require('./Service');
 * ifNoneMatch List The If-None-Match HTTP request header makes the request conditional. For GET and HEAD methods, the server will send back the requested resource, with a 200 status, only if it doesn't have an ETag matching the given ones. For other methods, the request will be processed only if the eventually existing resource's ETag doesn't match any of the values listed. (optional)
 * returns User
 * */
-const getUserId = ({ id, ifNoneMatch }) => new Promise(
-  async (resolve, reject) => {
-    try {
-      resolve(Service.successResponse({
-        id,
-        ifNoneMatch,
-      }));
-    } catch (e) {
-      reject(Service.rejectResponse(
-        e.message || 'Invalid input',
-        e.status || 405,
-      ));
-    }
-  },
-);
+const getUserId = ({ id, ifNoneMatch }) => 
+  anonymousUserManager.getUser(id)
+    .then(user => Service.successResponse(user))
+    .catch(e => Service.rejectResponse(
+      e.message || 'Invalid input',
+      e.status || 405,
+    ));
+
 /**
 * Query user list
 * List existing users.
@@ -33,22 +29,13 @@ const getUserId = ({ id, ifNoneMatch }) => new Promise(
 * offset Long Number of elements to skip in a collection request. (optional)
 * returns UserCollectionResponse
 * */
-const listUsers = ({ ifNoneMatch, limit, offset }) => new Promise(
-  async (resolve, reject) => {
-    try {
-      resolve(Service.successResponse({
-        ifNoneMatch,
-        limit,
-        offset,
-      }));
-    } catch (e) {
-      reject(Service.rejectResponse(
-        e.message || 'Invalid input',
-        e.status || 405,
-      ));
-    }
-  },
-);
+const listUsers = ({ ifNoneMatch, limit, offset }) => 
+  anonymousUserManager.getUserList(offset, limit)
+    .then(userList => Service.successResponse(userList))
+    .catch(e => Service.rejectResponse(
+      e.message || 'Invalid input',
+      e.status || 405,
+    ));
 /**
 * Create user
 * Create a new user in the system.
