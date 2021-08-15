@@ -2,10 +2,11 @@ import "./index.css";
 
 import React from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { Col, Image, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
 import Victories from "../../common/Victories";
+import UserAvatar from "../../common/UserAvatar";
 
 function Shift({ shift }) {
   switch (shift) {
@@ -31,7 +32,7 @@ function RankingEntry({ rank }) {
         <span className="ranking-position__text">{position}</span>
       </Col>
       <Col className="ranking-user">
-        <Image className="avatar" src={holder.avatar} roundedCircle />
+        <UserAvatar user={holder} />
         <span>{holder.name}</span>
       </Col>
       <Col className="ranking-separator" xs={1} md={5}></Col>

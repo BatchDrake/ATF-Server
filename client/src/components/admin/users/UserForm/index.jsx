@@ -6,8 +6,8 @@ function UserForm({ value }) {
     <Row xs={1} md={2}>
       <Col className="d-flex flex-column">
         <Row className="mb-auto">
-          <Col>
-            <Image src={value.avatar} roundedCircle />
+          <Col className="d-flex justify-content-center">
+            <Image className="w-50" src={value.avatar} roundedCircle />
           </Col>
         </Row>
         <Row>

@@ -1,0 +1,12 @@
+.avatar {
+  margin-right: 1em;
+  max-width: 42px;
+}
+
+.avatar--small {
+  width: 10%;
+}
+
+.avatar--big {
+  width: 25%;
+}

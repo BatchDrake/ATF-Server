@@ -1,7 +1,7 @@
 import "./index.css";
 
 import React from "react";
-import { Accordion, Container, ListGroup, Button } from "react-bootstrap";
+import { Accordion, Container, ListGroup } from "react-bootstrap";
 import useUsers from "../../../../hooks/users/useUsers";
 import UseAsyncSwitch from "../../../common/UseAsyncSwitch";
 import UsersEntry from "../UsersEntry";

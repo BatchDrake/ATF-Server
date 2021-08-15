@@ -1,10 +1,11 @@
 import "./index.css";
 
 import React from "react";
-import { Accordion, Col, Image, Row } from "react-bootstrap";
+import { Accordion, Col, Row } from "react-bootstrap";
 
 import Victories from "../../../common/Victories";
 import UserForm from "../UserForm";
+import UserAvatar from "../../../common/UserAvatar";
 
 function UsersEntry({ user, index }) {
   return (
@@ -12,7 +13,7 @@ function UsersEntry({ user, index }) {
       <Accordion.Header>
         <Row className="user-list__row">
           <Col>
-            <Image className="avatar" src={user.avatar} roundedCircle />
+            <UserAvatar user={user} />
             <span>{user.name}</span>
           </Col>
           <Col className="d-none d-xl-block">{user.email}</Col>
