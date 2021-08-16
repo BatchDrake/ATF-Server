@@ -15,7 +15,7 @@ const mockData = {
         },
         announcement: {
           id: 57623,
-          date: "2022-07-24",
+          date: "2022-07-23",
           location: {
             name: "A Coruña",
             id: "ChIJN1t_tDeuEmsRUsoyG83frY4",
@@ -90,12 +90,12 @@ const mockData = {
       party: {
         id: 12,
         type: {
-          name: "Fiesta No Oficial",
-          points: 1,
+          name: "Fiesta Oficial",
+          points: 3,
         },
         announcement: {
           id: 57623,
-          date: "2022-07-24",
+          date: "2022-07-22",
           location: {
             name: "Santiago",
             id: "ChIJN1t_tDeuEmsRUsoyG83frY4",
