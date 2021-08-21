@@ -8,8 +8,6 @@
 
 .ranking-position {
   font-size: 0.75em;
-  display: flex;
-  align-items: center;
 }
 
 .ranking-shift__arrow--rises {
@@ -24,4 +22,8 @@
   font-size: 0.75em;
   display: flex;
   align-items: center;
+}
+
+.ranking-user__name {
+  margin-left: 1em;
 }

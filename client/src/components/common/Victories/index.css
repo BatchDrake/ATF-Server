@@ -1,6 +1,8 @@
 .victories {
-  white-space: nowrap;
-  overflow: hidden;
+  position: relative;
+}
+
+.victories__amount {
 }
 
 .victories__star {
