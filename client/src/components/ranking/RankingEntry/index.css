@@ -6,14 +6,8 @@
   margin-top: 1em;
 }
 
-.avatar {
-  margin-right: 0.5em;
-}
-
 .ranking-position {
   font-size: 0.75em;
-  display: flex;
-  align-items: center;
 }
 
 .ranking-shift__arrow--rises {
@@ -24,17 +18,12 @@
   color: red;
 }
 
-.ranking-awards {
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.ranking-awards__star {
-  color: gold;
-}
-
 .ranking-score {
   font-size: 0.75em;
   display: flex;
   align-items: center;
+}
+
+.ranking-user__name {
+  margin-left: 1em;
 }

@@ -19,7 +19,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "generate": "npx openapi-generator-cli generate -i ../api/rest/atf-server.json -g javascript -o .",
+    "generate": "openapi-generator-cli generate -i ../api/rest/atf-server.json -g javascript -o . && while read in; do echo \"Postprocessing $in...\" && npx eslint --fix --quiet \"$in\"; done < .openapi-generator/FILES",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

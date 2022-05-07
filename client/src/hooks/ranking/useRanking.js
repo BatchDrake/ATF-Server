@@ -11,7 +11,7 @@ const mockData = {
       holder: {
         id: 934123,
         name: "Andrew",
-        avatar: "http://example.com",
+        avatar: "/images/andrew.jpg",
         score: 31,
         victories: 3,
       },
@@ -22,7 +22,7 @@ const mockData = {
       holder: {
         id: 934123,
         name: "Nirro",
-        avatar: "http://example.com",
+        avatar: "/images/nirro.jpg",
         score: 24,
         victories: 1,
       },

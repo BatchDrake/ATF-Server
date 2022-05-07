@@ -15,10 +15,160 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://actinid.org:3000",
+      "description": "Actinid (Develop)"
     }
   ],
   "paths": {
+    "/account": {
+      "patch": {
+        "summary": "Update account information",
+        "operationId": "patchAccount",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivate"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSelfUpdate"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "description": "Enables users to update their own user account information. This endpoint supports partial updates by sending only the keys and values that need to be updated.",
+        "tags": [
+          "account"
+        ]
+      },
+      "get": {
+        "summary": "Get account information",
+        "operationId": "getAccount",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivate"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Enables users to receive information about their own user accounts.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          }
+        ],
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/account/avatar": {
+      "post": {
+        "summary": "",
+        "operationId": "postAccountAvatar",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivate"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "description": "Allows an user to update their own avatar image.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/account/logout": {
       "parameters": [],
       "post": {
@@ -264,7 +414,7 @@
           }
         },
         "operationId": "listUsers",
-        "description": "List existing users.",
+        "description": "List existing users' information, both public and private. This is an administrative endpoint.",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
@@ -279,7 +429,7 @@
       },
       "post": {
         "summary": "Create user",
-        "operationId": "postUser",
+        "operationId": "post-user",
         "responses": {
           "201": {
             "description": "Created",
@@ -312,7 +462,7 @@
             "description": "Internal Server Error"
           }
         },
-        "description": "Create a new user in the system.",
+        "description": "Create a new user in the system. This is an administrative endpoint.",
         "tags": [
           "user"
         ],
@@ -345,7 +495,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/UserPrivate"
                 }
               }
             },
@@ -375,7 +525,7 @@
           }
         },
         "operationId": "getUserId",
-        "description": "Get an user.",
+        "description": "Get all user's data, public and private for an user given their ID. This is an administrative endpoint.",
         "parameters": [
           {
             "$ref": "#/components/parameters/ifNoneMatchHeader"
@@ -386,7 +536,131 @@
         {
           "$ref": "#/components/parameters/idParameter"
         }
-      ]
+      ],
+      "patch": {
+        "summary": "Update user's account information",
+        "operationId": "patchUserId",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivate"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserAdminUpdate"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "description": "Update user's information. This is an administrative endpoint. This endpoint supports partial updates by sending only the keys and values that need to be updated.",
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/user/{id}/avatar": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "post": {
+        "summary": "Update user's avatar",
+        "operationId": "postUserIdAvatar",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivate"
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifMatchHeader"
+          }
+        ],
+        "description": "Update user's avatar picture. This is an administrative endpoint. ",
+        "tags": [
+          "user"
+        ]
+      }
     },
     "/user/{id}/confirmation": {
       "parameters": [
@@ -444,7 +718,7 @@
             "description": "Internal Server Error"
           }
         },
-        "operationId": "listUserConfirmations",
+        "operationId": "listUserConfirmation",
         "description": "Gives a historic record of the user's attendance confirmations to parties, and subsequent scoring, sorted in descending chronological order.",
         "parameters": [
           {
@@ -841,7 +1115,7 @@
       ],
       "get": {
         "summary": "List confirmations for a party",
-        "operationId": "listPartyConfirmations",
+        "operationId": "listPartyConfirmation",
         "responses": {
           "200": {
             "description": "OK",
@@ -1074,7 +1348,7 @@
       ],
       "delete": {
         "summary": "Delete user from attendance confirmation",
-        "operationId": "deleteUserConfirmation",
+        "operationId": "deleteUserConfirmationId",
         "responses": {
           "200": {
             "description": "OK",
@@ -1293,7 +1567,7 @@
       },
       "delete": {
         "summary": "Delete party type",
-        "operationId": "deletePartyTypeId",
+        "operationId": "deletePartyId",
         "responses": {
           "200": {
             "description": "OK"
@@ -1756,6 +2030,128 @@
           }
         ]
       }
+    },
+    "/confirmation": {
+      "get": {
+        "summary": "List confirmations",
+        "tags": [
+          "confirmation"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmationCollectionResponse"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "data": [
+                        {
+                          "id": 0,
+                          "party": {
+                            "id": 0,
+                            "type": {
+                              "name": "string",
+                              "points": 0
+                            },
+                            "announcement": {
+                              "id": 0,
+                              "date": "2019-08-24",
+                              "location": {
+                                "name": "string",
+                                "id": "string"
+                              },
+                              "announcer": {
+                                "id": 0,
+                                "name": "string",
+                                "avatar": "http://example.com",
+                                "score": 0,
+                                "victories": 0,
+                                "location": {
+                                  "name": "string",
+                                  "id": "string"
+                                }
+                              }
+                            }
+                          },
+                          "photo": "http://example.com",
+                          "attenders": [
+                            {
+                              "user": {
+                                "id": 0,
+                                "name": "string",
+                                "avatar": "http://example.com",
+                                "score": 0,
+                                "victories": 0,
+                                "location": {
+                                  "name": "string",
+                                  "id": "string"
+                                }
+                              },
+                              "extras": [
+                                {
+                                  "id": 0,
+                                  "name": "string",
+                                  "points": 0
+                                }
+                              ],
+                              "points": 0
+                            }
+                          ]
+                        }
+                      ],
+                      "metadata": {
+                        "count": 0,
+                        "total": 0,
+                        "first": "http://example.com",
+                        "previous": "http://example.com",
+                        "next": "http://example.com",
+                        "last": "http://example.com"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "ETag": {
+                "$ref": "#/components/headers/eTagHeader"
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "operationId": "listConfirmation",
+        "description": "List all attendance confirmations for all users in descending chronological order. This allows to obtain a general history of scoring.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatchHeader"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -1771,6 +2167,20 @@
         "title": "PageMetadata",
         "type": "object",
         "description": "Necessary information for paged collections.",
+        "x-examples": {
+          "Example page metadata": {
+            "value": {
+              "count": 10,
+              "total": 50,
+              "first": "http://example.com",
+              "previous": "http://example.com",
+              "next": "http://example.com",
+              "last": "http://example.com",
+              "start": 1,
+              "finish": 10
+            }
+          }
+        },
         "properties": {
           "count": {
             "type": "integer",
@@ -1801,16 +2211,6 @@
             "type": "string",
             "format": "uri",
             "description": "Link to the last page of this collection."
-          },
-          "start": {
-            "type": "integer",
-            "description": "Number of the item at the start of this page. Only present if the page is not empty.",
-            "format": "int64"
-          },
-          "finish": {
-            "type": "integer",
-            "description": "Number of the item at the end of this page. Only present if the page is not empty.",
-            "format": "int64"
           }
         },
         "required": [
@@ -1818,21 +2218,7 @@
           "total",
           "first",
           "last"
-        ],
-        "x-examples": {
-          "Example page metadata": {
-            "value": {
-              "count": 10,
-              "total": 50,
-              "first": "http://example.com",
-              "previous": "http://example.com",
-              "next": "http://example.com",
-              "last": "http://example.com",
-              "start": 1,
-              "finish": 10
-            }
-          }
-        }
+        ]
       },
       "RankingCollectionResponse": {
         "title": "RankingCollectionResponse",
@@ -1937,7 +2323,7 @@
             "type": "array",
             "description": "The list of users.",
             "items": {
-              "$ref": "#/components/schemas/User"
+              "$ref": "#/components/schemas/UserPrivate"
             }
           },
           "metadata": {
@@ -2002,6 +2388,55 @@
           "location"
         ]
       },
+      "UserPrivate": {
+        "title": "UserPrivate",
+        "type": "object",
+        "description": "This model represents an user for administrative purposes. It contains all information about an user, both public and private.",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/EntityId"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Display name of the user."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1,
+            "description": "New user's email."
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "avatar": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to the user's avatar.\n"
+          },
+          "score": {
+            "type": "integer",
+            "format": "int64",
+            "description": "User's current score."
+          },
+          "victories": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0,
+            "description": "Number of times this participant has won the contest."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "location",
+          "avatar",
+          "score",
+          "victories"
+        ]
+      },
       "UserCreation": {
         "title": "UserCreation",
         "type": "object",
@@ -2038,6 +2473,51 @@
           "password",
           "location"
         ]
+      },
+      "UserSelfUpdate": {
+        "title": "UpdateSelfUpdate",
+        "type": "object",
+        "description": "Model used to update an user's public profile. This allows for partial updates as fields can be individually sent to only update their individual values. The value of any field not sent will be preserved as it appears on the resources previous version.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Display name of the user."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1,
+            "description": "New user's email."
+          }
+        }
+      },
+      "UserAdminUpdate": {
+        "title": "UserAdminUpdate",
+        "type": "object",
+        "description": "Model used to update another user's profile from an administrator account. This allows for partial updates as fields can be individually sent to only update their individual values. The value of any field not sent will be preserved as it appears on the resources previous version.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Display name of the user."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1,
+            "description": "New user's email."
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "victories": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0,
+            "description": "Number of times this participant has won the contest."
+          }
+        }
       },
       "AnnouncementCollectionResponse": {
         "title": "AnnouncementCollectionResponse",

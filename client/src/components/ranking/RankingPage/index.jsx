@@ -8,7 +8,11 @@ import RankingEntry from "../RankingEntry";
 
 function RankingContent({ value }) {
   const entries = value.data.map((rank) => {
-    return <RankingEntry rank={rank} />;
+    return (
+      <ListGroup.Item>
+        <RankingEntry rank={rank} />
+      </ListGroup.Item>
+    );
   });
 
   return <ListGroup>{entries}</ListGroup>;

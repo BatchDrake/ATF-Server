@@ -1,0 +1,10 @@
+.victories {
+  position: relative;
+}
+
+.victories__amount {
+}
+
+.victories__star {
+  color: gold;
+}
