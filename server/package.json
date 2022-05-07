@@ -4,6 +4,7 @@
   "description": "This API describes the communication protocol between client and server for a party contest.",
   "main": "index.js",
   "scripts": {
+    "generate:doc": "npx redoc-cli serve ../api/rest/atf-server.json",
     "generate": "npx @openapitools/openapi-generator-cli generate -i ../api/rest/atf-server.json -g nodejs-express-server -o .",
     "start": "DEBUG=express:* node index.js"
   },
